@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Skill Market Analyzer"
+description = "An interactive workforce intelligence dashboard that compares district job demand with academic curricula, highlights skill gaps, and runs adaptive readiness assessments for education and hiring teams."
+version = "1.0.0"
+id = "artifacts/skill-market-analyzer"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19166
+
+[services.development]
+run = "pnpm --filter @workspace/skill-market-analyzer run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/skill-market-analyzer", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/skill-market-analyzer/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19166"
+BASE_PATH = "/"

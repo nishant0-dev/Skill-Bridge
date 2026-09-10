@@ -1,6 +1,6 @@
-# [Project name]
+# Skill Market Analyzer
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+An interactive workforce intelligence dashboard that helps education teams connect district hiring signals to curriculum updates and adaptive skill-readiness assessments.
 
 ## Run & Operate
 
@@ -22,23 +22,28 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/skill-market-analyzer/src/App.tsx` — single-page dashboard shell, mock workforce data, curriculum review, and adaptive assessment flows
+- `artifacts/skill-market-analyzer/src/index.css` — application theme, typography, motion, and responsive visual utilities
+- `artifacts/skill-market-analyzer/.replit-artifact/artifact.toml` — artifact preview and workflow configuration
+- `artifacts/api-server` — shared API service scaffold; not required by the current local-data dashboard
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The first release uses realistic local data so the dashboard is useful immediately without requiring third-party feeds or a database.
+- The three workspace areas remain in one route and share stateful navigation to keep the signal → curriculum → assessment workflow fast to explore.
+- Export is intentionally a plain-text handoff so an approved curriculum delta can be downloaded without introducing a document-generation dependency.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+The dashboard provides district market intelligence, curriculum delta review and approval, a downloadable review package, and a three-step adaptive assessment that raises or lowers difficulty from each answer.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- The user asked to build, debug, and polish the supplied React dashboard.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Artifact workflows provide `PORT` and `BASE_PATH`; manual Vite builds need those variables set explicitly.
 
 ## Pointers
 

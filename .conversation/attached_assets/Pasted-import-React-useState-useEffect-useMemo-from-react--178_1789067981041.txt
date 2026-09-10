@@ -1,0 +1,1377 @@
+import React, { useState, useEffect, useMemo } from 'react';
+
+/* ---------------------------------------------------------------------- */
+/* 1. INLINE CRISP SVG ICONS (Lucide styled, zero external dependencies)  */
+/* ---------------------------------------------------------------------- */
+function Icon({ name, size = 18, className = "" }) {
+  const icons = {
+    layers: (
+      <>
+        <polygon points="12 2 2 7 12 12 22 7 12 2" />
+        <polyline points="2 17 12 22 22 17" />
+        <polyline points="2 12 12 17 22 12" />
+      </>
+    ),
+    chart: (
+      <>
+        <line x1="18" y1="20" x2="18" y2="10" />
+        <line x1="12" y1="20" x2="12" y2="4" />
+        <line x1="6" y1="20" x2="6" y2="14" />
+      </>
+    ),
+    gitCompare: (
+      <>
+        <circle cx="18" cy="18" r="3" />
+        <circle cx="6" cy="6" r="3" />
+        <path d="M13 6h3a2 2 0 0 1 2 2v7" />
+        <path d="M11 18H8a2 2 0 0 1-2-2V9" />
+      </>
+    ),
+    brain: (
+      <>
+        <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04Z" />
+        <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04Z" />
+      </>
+    ),
+    briefcase: (
+      <>
+        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+      </>
+    ),
+    trendingUp: (
+      <>
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+        <polyline points="17 6 23 6 23 12" />
+      </>
+    ),
+    trendingDown: (
+      <>
+        <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
+        <polyline points="17 18 23 18 23 12" />
+      </>
+    ),
+    mapPin: (
+      <>
+        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+        <circle cx="12" cy="10" r="3" />
+      </>
+    ),
+    refresh: (
+      <>
+        <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+        <path d="M3 3v5h5" />
+        <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+        <path d="M16 21h5v-5" />
+      </>
+    ),
+    trash: (
+      <>
+        <path d="M3 6h18" />
+        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+      </>
+    ),
+    plusCircle: (
+      <>
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="16" />
+        <line x1="8" y1="12" x2="16" y2="12" />
+      </>
+    ),
+    checkCircle: (
+      <>
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+        <polyline points="22 4 12 14.01 9 11.01" />
+      </>
+    ),
+    xCircle: (
+      <>
+        <circle cx="12" cy="12" r="10" />
+        <line x1="15" y1="9" x2="9" y2="15" />
+        <line x1="9" y1="9" x2="15" y2="15" />
+      </>
+    ),
+    check: <polyline points="20 6 9 17 4 12" />,
+    sparkles: (
+      <>
+        <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z" />
+      </>
+    ),
+    shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
+    download: (
+      <>
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="7 10 12 15 17 10" />
+        <line x1="12" y1="15" x2="12" y2="3" />
+      </>
+    ),
+    clock: (
+      <>
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+      </>
+    ),
+    award: (
+      <>
+        <circle cx="12" cy="8" r="7" />
+        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+      </>
+    ),
+    arrowRight: (
+      <>
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </>
+    ),
+    arrowUpRight: (
+      <>
+        <line x1="7" y1="17" x2="17" y2="7" />
+        <polyline points="7 7 17 7 17 17" />
+      </>
+    ),
+    code: (
+      <>
+        <polyline points="16 18 22 12 16 6" />
+        <polyline points="8 6 2 12 8 18" />
+      </>
+    ),
+    book: (
+      <>
+        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
+        <path d="M6 2v20" />
+      </>
+    ),
+    rotateCcw: (
+      <>
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+        <path d="M3 3v5h5" />
+      </>
+    ),
+    send: (
+      <>
+        <line x1="22" y1="2" x2="11" y2="13" />
+        <polygon points="22 2 15 22 11 13 2 9 22 2" />
+      </>
+    ),
+    filter: <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />,
+  };
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      {icons[name] || icons.sparkles}
+    </svg>
+  );
+}
+
+/* ---------------------------------------------------------------------- */
+/* 2. REALISTIC PRELOADED MOCK DATA (SIH Problem Statement SIH26134)      */
+/* ---------------------------------------------------------------------- */
+const DISTRICTS_DATA = {
+  pune: {
+    id: "pune",
+    name: "Pune",
+    state: "Maharashtra",
+    activeVacancies: 14820,
+    scrapedFrom: ["NCS National Portal", "Naukri.com", "LinkedIn", "Indeed"],
+    lastSyncTime: "8 mins ago",
+    hiringVelocity: "+19.4% MoM",
+    topSkills: [
+      { rank: 1, name: "Docker & Kubernetes", growthRate: "+34.2%", demandIndex: 96, category: "DevOps & Cloud" },
+      { rank: 2, name: "FastAPI & Python Async", growthRate: "+28.7%", demandIndex: 91, category: "Backend" },
+      { rank: 3, name: "React 18 / Next.js", growthRate: "+24.5%", demandIndex: 89, category: "Frontend" },
+      { rank: 4, name: "Cloud Native AWS / GCP", growthRate: "+22.1%", demandIndex: 85, category: "Infrastructure" },
+      { rank: 5, name: "PostgreSQL & Vector DBs", growthRate: "+19.8%", demandIndex: 82, category: "Data & AI" },
+    ],
+    obsoleteSkills: [
+      { name: "PHP 5.6 / Legacy LAMP", attritionRate: "-48.2%", riskLevel: "Critical", replacedBy: "FastAPI / Node.js Microservices" },
+      { name: "Adobe Flash / Silverlight", attritionRate: "-94.0%", riskLevel: "Critical", replacedBy: "HTML5 Canvas / Modern Web UI" },
+      { name: "Monolithic Manual FTP / CPanel", attritionRate: "-56.1%", riskLevel: "High", replacedBy: "Docker CI/CD & GitHub Actions" },
+      { name: "SOAP / XML-RPC Web Services", attritionRate: "-38.4%", riskLevel: "High", replacedBy: "RESTful OpenAPI 3.0 & GraphQL" },
+      { name: "Legacy SVN / CVS Versioning", attritionRate: "-61.7%", riskLevel: "Moderate", replacedBy: "Git & Trunk-based PR Reviews" },
+    ],
+    domainDeficits: [
+      { domain: "Full-Stack Web Engineering", demand: 5200, supply: 2400, deficit: 2800, deficitPercent: 53.8 },
+      { domain: "Cloud & DevOps Automation", demand: 4100, supply: 1350, deficit: 2750, deficitPercent: 67.1 },
+      { domain: "AI & Data Engineering", demand: 3100, supply: 1100, deficit: 2000, deficitPercent: 64.5 },
+      { domain: "Cybersecurity & API Security", demand: 1800, supply: 650, deficit: 1150, deficitPercent: 63.9 },
+      { domain: "Embedded Systems & IoT", demand: 1620, supply: 890, deficit: 730, deficitPercent: 45.1 },
+    ],
+  },
+  bengaluru: {
+    id: "bengaluru",
+    name: "Bengaluru",
+    state: "Karnataka",
+    activeVacancies: 38450,
+    scrapedFrom: ["NCS National Portal", "LinkedIn Tech Hub", "Instahyre", "Naukri"],
+    lastSyncTime: "4 mins ago",
+    hiringVelocity: "+26.8% MoM",
+    topSkills: [
+      { rank: 1, name: "LLM Ops & GenAI RAG", growthRate: "+68.4%", demandIndex: 99, category: "AI Systems" },
+      { rank: 2, name: "Kubernetes & Distributed Systems", growthRate: "+41.2%", demandIndex: 95, category: "Cloud" },
+      { rank: 3, name: "Next.js & TypeScript", growthRate: "+33.9%", demandIndex: 92, category: "Full-Stack" },
+      { rank: 4, name: "FastAPI / Go Microservices", growthRate: "+31.5%", demandIndex: 90, category: "Backend" },
+      { rank: 5, name: "Kafka & Event Streaming", growthRate: "+27.4%", demandIndex: 86, category: "Data Architecture" },
+    ],
+    obsoleteSkills: [
+      { name: "Monolithic J2EE Struts 1.x", attritionRate: "-52.3%", riskLevel: "Critical", replacedBy: "Spring Boot 3 / FastAPI" },
+      { name: "PHP 5.4 / Procedural MySQL", attritionRate: "-65.0%", riskLevel: "Critical", replacedBy: "Next.js + Prisma" },
+      { name: "On-prem Bare Metal Admin", attritionRate: "-44.6%", riskLevel: "High", replacedBy: "Terraform IaC" },
+      { name: "jQuery DOM-heavy spaghetti", attritionRate: "-39.2%", riskLevel: "High", replacedBy: "Modern Reactive UI (React)" },
+      { name: "WSDL / XML RPC Services", attritionRate: "-49.1%", riskLevel: "Moderate", replacedBy: "OpenAPI REST & gRPC" },
+    ],
+    domainDeficits: [
+      { domain: "Generative AI & LLM Systems", demand: 11200, supply: 3200, deficit: 8000, deficitPercent: 71.4 },
+      { domain: "Cloud & Distributed Systems", demand: 9800, supply: 3900, deficit: 5900, deficitPercent: 60.2 },
+      { domain: "Full-Stack Modern Web", demand: 8900, supply: 4600, deficit: 4300, deficitPercent: 48.3 },
+      { domain: "Data Engineering & Pipelines", demand: 5400, supply: 2100, deficit: 3300, deficitPercent: 61.1 },
+      { domain: "DevSecOps & Platform Eng", demand: 3150, supply: 1050, deficit: 2100, deficitPercent: 66.7 },
+    ],
+  },
+  jaipur: {
+    id: "jaipur",
+    name: "Jaipur",
+    state: "Rajasthan",
+    activeVacancies: 8920,
+    scrapedFrom: ["NCS National Portal", "Naukri.com", "Indeed", "Rajasthan Rozgar"],
+    lastSyncTime: "16 mins ago",
+    hiringVelocity: "+14.2% MoM",
+    topSkills: [
+      { rank: 1, name: "React.js & Next.js Basics", growthRate: "+29.4%", demandIndex: 92, category: "Frontend" },
+      { rank: 2, name: "Python & FastAPI REST APIs", growthRate: "+26.8%", demandIndex: 88, category: "Backend" },
+      { rank: 3, name: "Docker Container Deployment", growthRate: "+23.1%", demandIndex: 83, category: "Cloud DevOps" },
+      { rank: 4, name: "MySQL 8 / PostgreSQL", growthRate: "+17.5%", demandIndex: 79, category: "Databases" },
+      { rank: 5, name: "Git & GitHub Collaboration", growthRate: "+15.2%", demandIndex: 76, category: "Dev Tools" },
+    ],
+    obsoleteSkills: [
+      { name: "PHP 5.6 Procedural Coding", attritionRate: "-54.5%", riskLevel: "Critical", replacedBy: "Python / Node.js Backends" },
+      { name: "Adobe Flash / Macromedia Tools", attritionRate: "-98.0%", riskLevel: "Critical", replacedBy: "Figma & Modern Web Canvas" },
+      { name: "Manual Windows IIS Server setup", attritionRate: "-49.2%", riskLevel: "High", replacedBy: "Docker & Cloud PaaS" },
+      { name: "Monolithic Apache Bare-metal", attritionRate: "-38.0%", riskLevel: "High", replacedBy: "Nginx Container Reverse Proxies" },
+      { name: "Visual Basic 6.0 Form Apps", attritionRate: "-72.0%", riskLevel: "Critical", replacedBy: "Modern Web Dashboards" },
+    ],
+    domainDeficits: [
+      { domain: "Full-Stack Web Engineering", demand: 3200, supply: 1250, deficit: 1950, deficitPercent: 60.9 },
+      { domain: "Cloud & Container DevOps", demand: 2300, supply: 720, deficit: 1580, deficitPercent: 68.7 },
+      { domain: "Data Analytics & Python", demand: 1850, supply: 810, deficit: 1040, deficitPercent: 56.2 },
+      { domain: "API Integration & Middleware", demand: 1200, supply: 490, deficit: 710, deficitPercent: 59.2 },
+      { domain: "Cyber Hygiene & Security", demand: 750, supply: 280, deficit: 470, deficitPercent: 62.7 },
+    ],
+  },
+};
+
+const SYLLABUS_SCHEMES = [
+  {
+    id: "diploma-web-2022",
+    title: "Diploma in Web Technologies (2022 Scheme)",
+    regulation: "State Board of Technical Education - 2022 Scheme",
+    currentAlignment: 46,
+    projectedAlignment: 91,
+    reclaimedHours: 48,
+    outdatedTopics: [
+      { code: "WT-301", title: "PHP 5.6 Basics & Procedural MySQL (mysql_* APIs)", reason: "Deprecated globally since 2018. Critical SQL injection vulnerabilities; lacks asynchronous support and typing.", hoursReclaimed: 16, severity: "Critical" },
+      { code: "WT-304", title: "Adobe Flash & ActionScript 3.0 Interactive Embeds", reason: "End-of-life declared; completely disabled across modern web browsers. Zero industry demand.", hoursReclaimed: 10, severity: "Critical" },
+      { code: "WT-402", title: "Monolithic Apache Bare-Metal Deployment & FileZilla FTP", reason: "Industry shifted entirely to containerized infrastructure and automated CI/CD pipelines.", hoursReclaimed: 12, severity: "High" },
+      { code: "WT-405", title: "Traditional XML-RPC & SOAP Envelope Web Services", reason: "Heavy overhead, legacy XML payload serialization; virtually non-existent in modern web start-ups and SaaS.", hoursReclaimed: 6, severity: "High" },
+      { code: "WT-203", title: "Centralized Subversion (SVN) & Manual File Locking", reason: "Replaced universally by distributed Git, branch strategies, and automated PR code reviews.", hoursReclaimed: 4, severity: "Medium" },
+    ],
+    demandedModules: [
+      { code: "MOD-NEW-101", title: "RESTful APIs & Microservices via FastAPI & Python Async", industryDemand: 94, labHours: 16, nsqfLevel: 5, roles: ["Backend Engineer", "API Developer"] },
+      { code: "MOD-NEW-102", title: "Docker Containers, Multi-Stage Builds & Orchestration", industryDemand: 92, labHours: 12, nsqfLevel: 5, roles: ["DevOps Engineer", "Cloud Associate"] },
+      { code: "MOD-NEW-103", title: "Next.js 14 Fullstack App Router, SSR & Tailwind CSS", industryDemand: 89, labHours: 12, nsqfLevel: 6, roles: ["Full-Stack Developer", "Frontend Engineer"] },
+      { code: "MOD-NEW-104", title: "Automated CI/CD Pipelines with GitHub Actions & Cloud", industryDemand: 86, labHours: 8, nsqfLevel: 5, roles: ["Release Engineer", "QA Automation"] },
+    ],
+  },
+  {
+    id: "btech-cse-2021",
+    title: "B.Tech Computer Science & Engineering (2021 Regulation)",
+    regulation: "AICTE Autonomous Regulation 2021",
+    currentAlignment: 54,
+    projectedAlignment: 94,
+    reclaimedHours: 52,
+    outdatedTopics: [
+      { code: "CS-503", title: "J2EE Servlet Monoliths & Struts 1.x MVC Architecture", reason: "Monolithic architecture obsolete in cloud environments; complex XML config replaced by microservices.", hoursReclaimed: 18, severity: "Critical" },
+      { code: "CS-602", title: "On-Premise Physical Server Provisioning & BIOS Config", reason: "Physical bare-metal maintenance replaced by AWS/Azure Virtual Networks and Infrastructure as Code.", hoursReclaimed: 14, severity: "High" },
+      { code: "CS-408", title: "Manual Software Testing using Excel Verification Matrices", reason: "Enterprise teams require automated unit/integration testing pipelines and End-to-End frameworks.", hoursReclaimed: 12, severity: "High" },
+      { code: "CS-305", title: "CORBA & DCOM Distributed Object Architectures", reason: "Superseded by high-speed gRPC Protocol Buffers and RESTful web microservices.", hoursReclaimed: 8, severity: "Critical" },
+    ],
+    demandedModules: [
+      { code: "MOD-CSE-201", title: "Cloud-Native Distributed Systems & Microservices (FastAPI/Go)", industryDemand: 96, labHours: 18, nsqfLevel: 6, roles: ["Systems Engineer", "Cloud Architect"] },
+      { code: "MOD-CSE-202", title: "Kubernetes Cluster Management & Production DevOps", industryDemand: 93, labHours: 14, nsqfLevel: 6, roles: ["Platform Engineer", "SRE"] },
+      { code: "MOD-CSE-203", title: "Modern Full-Stack Engineering (Next.js, TypeScript & Prisma)", industryDemand: 90, labHours: 12, nsqfLevel: 6, roles: ["Full-Stack Engineer", "Product Engineer"] },
+      { code: "MOD-CSE-204", title: "LLM Application Development & Vector Search (RAG Pipelines)", industryDemand: 95, labHours: 8, nsqfLevel: 7, roles: ["AI Engineer", "ML Solutions Architect"] },
+    ],
+  },
+];
+
+const ADAPTIVE_QUIZ_DATA = {
+  "q1-easy": {
+    id: "q1-easy",
+    difficulty: "Easy",
+    domain: "REST API & Web Architecture",
+    questionText: "In a modern RESTful API designed with FastAPI or Next.js, what is the standard HTTP status code returned when a client successfully creates a new resource on the server?",
+    codeSnippet: `// Example POST /api/v1/students\nfetch('/api/v1/students', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ name: "Aarav Sharma", district: "Pune" })\n});`,
+    options: [
+      { id: "a", text: "200 OK (Generic Successful Request)", isCorrect: false, explanation: "200 OK is standard for GET/PUT, but REST standards specifically recommend 201 Created for resource generation." },
+      { id: "b", text: "201 Created (Resource instantiated with URI)", isCorrect: true, explanation: "Correct! RFC 7231 specifies 201 Created as the accurate HTTP status code upon resource generation." },
+      { id: "c", text: "204 No Content (Action completed without body)", isCorrect: false, explanation: "204 No Content signifies fulfillment without response body (common in DELETE operations)." },
+      { id: "d", text: "304 Not Modified (Cached resource valid)", isCorrect: false, explanation: "304 Not Modified is a conditional cache redirect code, not a resource creation status." },
+    ],
+  },
+  "q2-medium": {
+    id: "q2-medium",
+    difficulty: "Medium",
+    domain: "Containerization & Docker",
+    questionText: "When crafting a production Dockerfile for a Next.js or Python FastAPI microservice, which practice is essential for minimizing image size and preventing secret leakage?",
+    codeSnippet: `# Multi-stage Dockerfile\nFROM node:20-alpine AS builder\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci\nCOPY . .\nRUN npm run build\n\nFROM node:20-alpine AS runner\n# What is copied here?`,
+    options: [
+      { id: "a", text: "Multi-stage build copying only compiled artifacts to the runner image", isCorrect: true, explanation: "Correct! Multi-stage builds isolate build tooling and node_modules, producing lean, hardened production containers (<150MB)." },
+      { id: "b", text: "Copying node_modules directly from the host workstation", isCorrect: false, explanation: "Directly copying host node_modules introduces OS architecture binary mismatches and inflates the image size." },
+      { id: "c", text: "Embedding .env.production secrets directly in Dockerfile ARG", isCorrect: false, explanation: "Embedding secrets in Dockerfile ARGs bakes them into image layer metadata, posing a security vulnerability." },
+      { id: "d", text: "Running the application container directly as root user for full system access", isCorrect: false, explanation: "Running as root violates container security guidelines; production containers should utilize non-root USER profiles." },
+    ],
+  },
+  "q2-easy-remedial": {
+    id: "q2-easy-remedial",
+    difficulty: "Easy",
+    domain: "Client-Server Communication",
+    questionText: "Which format is universally used in industry today as the lightweight data interchange standard between frontend web apps (React/Next.js) and backend services?",
+    options: [
+      { id: "a", text: "JSON (JavaScript Object Notation)", isCorrect: true, explanation: "Correct! JSON is the universal, human-readable standard across modern web and mobile APIs." },
+      { id: "b", text: "SOAP XML Envelopes with WSDL schemas", isCorrect: false, explanation: "SOAP XML is a heavyweight legacy protocol with high parsing overhead." },
+      { id: "c", text: "Raw Delimited CSV text files", isCorrect: false, explanation: "CSV is poorly suited for nested object hierarchies and real-time state sync." },
+      { id: "d", text: "Compiled Binary Java Serialized Objects", isCorrect: false, explanation: "Java serialization is platform-dependent and vulnerable to deserialization exploits." },
+    ],
+  },
+  "q3-hard": {
+    id: "q3-hard",
+    difficulty: "Hard",
+    domain: "Full-Stack Performance & Next.js SSR",
+    questionText: "In Next.js 14 App Router, what is the key architectural advantage of React Server Components (RSC) compared to traditional client-side SPA rendering?",
+    codeSnippet: `// app/dashboard/page.tsx (React Server Component)\nexport default async function DashboardPage() {\n  // Direct server-side database query\n  const vacancies = await db.vacancies.findMany({ where: { district: 'Pune' } });\n  return <VacanciesTable data={vacancies} />;\n}`,
+    options: [
+      { id: "a", text: "Zero client-side JS bundle overhead for dependencies and direct server access without exposing DB credentials to browser", isCorrect: true, explanation: "Correct! Server Components execute exclusively on the server, streaming lightweight HTML/RSC payloads without shipping DB drivers to client bundles." },
+      { id: "b", text: "Automatic conversion of SQL queries into client-side IndexedDB databases", isCorrect: false, explanation: "RSCs do not replicate backend SQL databases to the client browser." },
+      { id: "c", text: "Elimination of all CSS stylesheets by generating raw canvas pixels", isCorrect: false, explanation: "RSCs output semantic HTML and CSS, not canvas pixels." },
+      { id: "d", text: "Turning client browsers into distributed peer-to-peer proxy nodes", isCorrect: false, explanation: "RSCs execute on your server without turning clients into proxies." },
+    ],
+  },
+  "q3-medium-fallback": {
+    id: "q3-medium-fallback",
+    difficulty: "Medium",
+    domain: "Asynchronous Python & FastAPI",
+    questionText: "Why has industry increasingly adopted FastAPI over traditional Flask for modern microservice architectures?",
+    codeSnippet: `@app.get("/api/v1/skills/{district_id}")\nasync def get_market_skills(district_id: str):\n    results = await db.fetch_live_vacancies(district_id)\n    return {"district": district_id, "skills": results}`,
+    options: [
+      { id: "a", text: "Native async/await concurrency with automatic OpenAPI 3.0 doc generation & Pydantic data validation", isCorrect: true, explanation: "Correct! FastAPI delivers high-concurrency async I/O matching Go/Node.js, with built-in OpenAPI docs and strict Pydantic type safety." },
+      { id: "b", text: "FastAPI runs natively without requiring any Python runtime on the server", isCorrect: false, explanation: "FastAPI requires standard Python 3.8+ and an ASGI server such as Uvicorn." },
+      { id: "c", text: "It completely eliminates the need for any database software", isCorrect: false, explanation: "FastAPI is a web framework, not a database." },
+      { id: "d", text: "FastAPI automatically compiles Python code directly into x86 machine assembly", isCorrect: false, explanation: "FastAPI relies on standard Python byte-code execution via ASGI event loops." },
+    ],
+  },
+};
+
+const REMEDIAL_ROADMAP_STEPS = [
+  {
+    title: "Step 1: Core Foundation Bridge — Dockerized Microservices Lab",
+    duration: "15 Hours (Practical Lab)",
+    badge: "Immediate Priority",
+    description: "Bridge the critical gap between theoretical academic syllabus and cloud production standards.",
+    deliverables: [
+      "Build a multi-tier containerized microservice with FastAPI and PostgreSQL.",
+      "Configure multi-stage Dockerfiles reducing production footprint from 800MB to 95MB.",
+      "Implement strict Pydantic v2 data models and OpenAPI 3.0 schema generation.",
+    ],
+  },
+  {
+    title: "Step 2: Capstone Industry Deployment — Next.js 14 + Cloud CI/CD",
+    duration: "25 Hours (Guided Capstone)",
+    badge: "Industry Certification Tier",
+    description: "Deliver an enterprise-grade web application meeting NSQF Level 5/6 industry readiness criteria.",
+    deliverables: [
+      "Develop a high-performance Next.js 14 App Router dashboard with Server Components.",
+      "Automate GitHub Actions CI/CD workflows for linting, unit testing, and Docker push.",
+      "Earn verified Blood Code / SIH Industry-Aligned Competency Micro-Credential.",
+    ],
+  },
+];
+
+/* ---------------------------------------------------------------------- */
+/* 3. MAIN SELF-CONTAINED REACT COMPONENT: App                            */
+/* ---------------------------------------------------------------------- */
+export default function App() {
+  const [activeTab, setActiveTab] = useState("market"); // 'market' | 'curriculum' | 'assessment'
+  const [selectedDistrictId, setSelectedDistrictId] = useState("pune");
+  const [selectedSchemeId, setSelectedSchemeId] = useState("diploma-web-2022");
+  const [toasts, setToasts] = useState([]);
+  const [chartMode, setChartMode] = useState("bar");
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Curriculum Delta State
+  const [approvedSchemes, setApprovedSchemes] = useState({});
+  const [showExportModal, setShowExportModal] = useState(false);
+
+  // Adaptive Quiz State
+  const [currentQuizStep, setCurrentQuizStep] = useState(0); // 0, 1, 2
+  const [currentQuestionKey, setCurrentQuestionKey] = useState("q1-easy");
+  const [selectedOptionId, setSelectedOptionId] = useState(null);
+  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
+  const [userQuizAnswers, setUserQuizAnswers] = useState([]);
+  const [isQuizCompleted, setIsQuizCompleted] = useState(false);
+
+  const currentDistrict = DISTRICTS_DATA[selectedDistrictId] || DISTRICTS_DATA["pune"];
+  const currentScheme = SYLLABUS_SCHEMES.find((s) => s.id === selectedSchemeId) || SYLLABUS_SCHEMES[0];
+  const currentQuestion = ADAPTIVE_QUIZ_DATA[currentQuestionKey] || ADAPTIVE_QUIZ_DATA["q1-easy"];
+
+  // Helper: Interactive Toast Notifications
+  const triggerToast = (type, title, message) => {
+    const id = Date.now().toString() + Math.random().toString(36).substring(2, 5);
+    setToasts((prev) => [...prev, { id, type, title, message }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 4500);
+  };
+
+  const removeToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  // Tab 1 Scraper Sync Action
+  const handleRefreshScrape = () => {
+    setIsRefreshing(true);
+    setTimeout(() => {
+      setIsRefreshing(false);
+      triggerToast(
+        "info",
+        "Market Feeds Synchronized",
+        `Ingested 1,240 live job postings from NCS, Naukri & LinkedIn for ${currentDistrict.name} cluster.`
+      );
+    }, 800);
+  };
+
+  // Tab 2 Delta Approval Action
+  const handleApproveDelta = () => {
+    setApprovedSchemes((prev) => ({ ...prev, [currentScheme.id]: true }));
+    triggerToast(
+      "success",
+      "Curriculum Delta Approved & Exported",
+      `Sanctioned delta for "${currentScheme.title}". Reclaimed ${currentScheme.reclaimedHours} lecture hours mapped to NSQF Level 5/6 industry lab credits.`
+    );
+  };
+
+  // Tab 3 Adaptive Quiz Simulator Logic
+  const handleSelectQuizOption = (optId) => {
+    if (isAnswerSubmitted) return;
+    setSelectedOptionId(optId);
+  };
+
+  const handleSubmitQuizAnswer = () => {
+    if (!selectedOptionId) return;
+    setIsAnswerSubmitted(true);
+    const chosen = currentQuestion.options.find((o) => o.id === selectedOptionId);
+    setUserQuizAnswers((prev) => [
+      ...prev,
+      { ...chosen, difficulty: currentQuestion.difficulty },
+    ]);
+  };
+
+  const handleNextQuizQuestion = () => {
+    const lastAns = userQuizAnswers[userQuizAnswers.length - 1];
+
+    if (currentQuizStep === 0) {
+      // Branch from Question 1 to Question 2
+      if (lastAns?.isCorrect) {
+        setCurrentQuestionKey("q2-medium"); // Promoted to Medium!
+      } else {
+        setCurrentQuestionKey("q2-easy-remedial"); // Remedial Easy
+      }
+      setCurrentQuizStep(1);
+      setSelectedOptionId(null);
+      setIsAnswerSubmitted(false);
+    } else if (currentQuizStep === 1) {
+      // Branch from Question 2 to Question 3
+      if (lastAns?.isCorrect && lastAns?.difficulty === "Medium") {
+        setCurrentQuestionKey("q3-hard"); // Promoted to Hard!
+      } else {
+        setCurrentQuestionKey("q3-medium-fallback");
+      }
+      setCurrentQuizStep(2);
+      setSelectedOptionId(null);
+      setIsAnswerSubmitted(false);
+    } else {
+      // Completed all 3 questions!
+      setIsQuizCompleted(true);
+      triggerToast(
+        "success",
+        "Adaptive Assessment Completed",
+        "Candidate evaluated: 82% Job Readiness Score with NSQF Level 5 Alignment."
+      );
+    }
+  };
+
+  const handleResetQuiz = () => {
+    setCurrentQuizStep(0);
+    setCurrentQuestionKey("q1-easy");
+    setSelectedOptionId(null);
+    setIsAnswerSubmitted(false);
+    setUserQuizAnswers([]);
+    setIsQuizCompleted(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0b1120] text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white antialiased">
+      {/* ---------------------------------------------------------------- */}
+      {/* INTERACTIVE FLOATING TOASTS                                      */}
+      {/* ---------------------------------------------------------------- */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3 max-w-md w-full pointer-events-none">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            className="pointer-events-auto flex items-start gap-3 p-4 rounded-xl border border-slate-700/80 bg-slate-900/95 shadow-2xl backdrop-blur-md text-slate-100 animate-in slide-in-from-bottom-5"
+          >
+            <div className="mt-0.5 flex-shrink-0">
+              {toast.type === "success" && <Icon name="checkCircle" size={18} className="text-emerald-400" />}
+              {toast.type === "info" && <Icon name="sparkles" size={18} className="text-cyan-400" />}
+            </div>
+            <div className="flex-1 min-w-0">
+              <h4 className="text-sm font-semibold text-white">{toast.title}</h4>
+              <p className="mt-1 text-xs text-slate-300 leading-relaxed">{toast.message}</p>
+            </div>
+            <button
+              onClick={() => removeToast(toast.id)}
+              className="text-slate-400 hover:text-white text-xs p-1 rounded hover:bg-slate-800"
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* STICKY HEADER & VIEW NAVIGATION                                  */}
+      {/* ---------------------------------------------------------------- */}
+      <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-[#0b1120]/90 backdrop-blur-xl">
+        {/* Top utility ribbon */}
+        <div className="border-b border-slate-800/50 px-4 sm:px-6 py-1.5 flex flex-wrap items-center justify-between text-xs text-slate-400">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 font-medium text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+              SIH26134
+            </span>
+            <span className="text-slate-600">·</span>
+            <span className="hidden sm:inline text-slate-300">
+              Smart India Hackathon — Aligning Skill Development with Industry Demands
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5 text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 text-[11px] font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>NCS LIVE FEED</span>
+            </div>
+            <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800/70 border border-slate-700/60 text-slate-300">
+              <span className="text-slate-400">Team:</span>
+              <strong className="text-white tracking-wide">Blood Code</strong>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Brand & 3 Switchable View Tabs */}
+        <div className="px-4 sm:px-6 py-3 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-cyan-500 text-white shadow-lg shadow-indigo-500/20 ring-1 ring-white/20">
+              <Icon name="layers" size={20} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
+                  Skill Bridge
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-sm">
+                    v2.0
+                  </span>
+                </h1>
+              </div>
+              <p className="text-xs text-slate-400">
+                AI-Driven Curriculum Delta & Adaptive Talent Readiness
+              </p>
+            </div>
+          </div>
+
+          {/* 3 Switchable Tabs */}
+          <nav className="flex items-center p-1 rounded-xl bg-slate-900/90 border border-slate-800 shadow-inner overflow-x-auto">
+            <button
+              onClick={() => setActiveTab("market")}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                activeTab === "market"
+                  ? "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md border border-indigo-500/40"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+              }`}
+            >
+              <Icon name="chart" size={16} />
+              <span>Market Intelligence & District Demand</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("curriculum")}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                activeTab === "curriculum"
+                  ? "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md border border-indigo-500/40"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+              }`}
+            >
+              <Icon name="gitCompare" size={16} />
+              <span>Curriculum Delta Engine</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("assessment")}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                activeTab === "assessment"
+                  ? "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md border border-indigo-500/40"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+              }`}
+            >
+              <Icon name="brain" size={16} />
+              <span>Adaptive Assessment & Readiness</span>
+            </button>
+          </nav>
+        </div>
+      </header>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* MAIN CONTAINER: 3 VIEWS                                          */}
+      {/* ---------------------------------------------------------------- */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        {/* =============================================================== */}
+        {/* VIEW 1: MARKET INTELLIGENCE & DISTRICT DEMAND                   */}
+        {/* =============================================================== */}
+        {activeTab === "market" && (
+          <div className="space-y-6 animate-in fade-in duration-300">
+            {/* Controller: District Dropdown & Scraper Sync */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-xl">
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                  <Icon name="mapPin" size={16} className="text-indigo-400" />
+                  <span>District Filter:</span>
+                </div>
+                <div className="relative">
+                  <select
+                    value={selectedDistrictId}
+                    onChange={(e) => setSelectedDistrictId(e.target.value)}
+                    className="appearance-none pl-4 pr-10 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer shadow-inner"
+                  >
+                    <option value="pune">Pune (Maharashtra Tech Cluster)</option>
+                    <option value="bengaluru">Bengaluru (Silicon Plateau Hub)</option>
+                    <option value="jaipur">Jaipur (Emerging SaaS Corridor)</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+                    <Icon name="filter" size={14} />
+                  </div>
+                </div>
+
+                <div className="hidden lg:flex items-center gap-2 text-xs text-slate-400 bg-slate-800/50 px-3 py-1.5 rounded-lg border border-slate-800">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span>State: <strong className="text-slate-200">{currentDistrict.state}</strong></span>
+                  <span className="text-slate-600">|</span>
+                  <span>Hiring Velocity: <strong className="text-indigo-300">{currentDistrict.hiringVelocity}</strong></span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                <div className="text-right text-xs">
+                  <p className="text-slate-400 font-mono text-[11px]">Sync: {currentDistrict.lastSyncTime}</p>
+                  <p className="text-[11px] text-slate-500">{currentDistrict.scrapedFrom.join(", ")}</p>
+                </div>
+                <button
+                  onClick={handleRefreshScrape}
+                  disabled={isRefreshing}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-200 transition-all active:scale-95 disabled:opacity-50"
+                >
+                  <Icon name="refresh" size={14} className={`text-indigo-400 ${isRefreshing ? "animate-spin" : ""}`} />
+                  <span>{isRefreshing ? "Scraping..." : "Sync Feeds"}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* 3 REQUIRED METRIC CARDS */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {/* Metric 1: Active Vacancies Scraped */}
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900/80 to-indigo-950/40 border border-slate-800 shadow-xl">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                      <Icon name="briefcase" size={18} />
+                    </div>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                      Active Vacancies Scraped
+                    </span>
+                  </div>
+                  <span className="text-xs font-medium text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
+                    <Icon name="arrowUpRight" size={12} />
+                    {currentDistrict.hiringVelocity}
+                  </span>
+                </div>
+                <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-2">
+                  {currentDistrict.activeVacancies.toLocaleString()}
+                </h3>
+                <p className="mt-1 text-xs text-slate-400">
+                  NCS National Portal, LinkedIn & Job Portals in <strong className="text-slate-200">{currentDistrict.name}</strong>
+                </p>
+                <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                  <span className="text-slate-500">Live Postings Indexed</span>
+                  <span className="font-mono text-indigo-400 font-semibold">100% Verified</span>
+                </div>
+              </div>
+
+              {/* Metric 2: Top 5 In-Demand Skills */}
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900/80 to-emerald-950/30 border border-slate-800 shadow-xl">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                      <Icon name="trendingUp" size={18} />
+                    </div>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                      Top 5 In-Demand Skills
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-400 font-mono">Q3/Q4 Index</span>
+                </div>
+                <div className="mt-2 space-y-2">
+                  {currentDistrict.topSkills.slice(0, 3).map((skill) => (
+                    <div key={skill.name} className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-2 truncate">
+                        <span className="w-4 h-4 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center font-mono text-[10px] font-bold">
+                          {skill.rank}
+                        </span>
+                        <span className="text-slate-200 font-medium truncate">{skill.name}</span>
+                      </div>
+                      <span className="font-mono font-semibold text-emerald-400 ml-2">{skill.growthRate}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                  <span className="text-slate-500">Highest Demand</span>
+                  <span className="font-mono text-emerald-400 font-semibold">{currentDistrict.topSkills[0]?.name}</span>
+                </div>
+              </div>
+
+              {/* Metric 3: High Attrition / Obsolete Skills */}
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900/80 to-rose-950/30 border border-slate-800 shadow-xl">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400">
+                      <Icon name="trendingDown" size={18} />
+                    </div>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                      High Attrition / Obsolete Skills
+                    </span>
+                  </div>
+                  <span className="text-xs font-semibold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/20">
+                    5 Flagged
+                  </span>
+                </div>
+                <div className="mt-2 space-y-2">
+                  {currentDistrict.obsoleteSkills.slice(0, 3).map((obs) => (
+                    <div key={obs.name} className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-2 truncate">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 flex-shrink-0"></span>
+                        <span className="text-slate-300 truncate">{obs.name}</span>
+                      </div>
+                      <span className="font-mono text-rose-400 font-semibold ml-2">{obs.attritionRate}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                  <span className="text-slate-500">Top Deprecated Tech</span>
+                  <span className="text-rose-400 font-medium truncate">{currentDistrict.obsoleteSkills[0]?.name}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* VISUAL BAR/LINE CHART MOCK: Skill Deficit vs Demand */}
+            <div className="p-5 sm:p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-2xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                      Deficit Modeling
+                    </span>
+                    <h3 className="text-base sm:text-lg font-bold text-white">
+                      Skill Deficit vs Industry Demand — {currentDistrict.name} Hub
+                    </h3>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-400">
+                    Comparing Industry Hiring Requirements (Demand) against Current Academic Passout Supply.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-4 text-xs">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded bg-indigo-500"></span>
+                    <span className="text-slate-300">Industry Demand</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded bg-emerald-500"></span>
+                    <span className="text-slate-300">Academic Supply</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded bg-rose-500/80"></span>
+                    <span className="text-slate-300">Net Deficit Gap</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Progress Bar Mock Representation */}
+              <div className="space-y-4">
+                {currentDistrict.domainDeficits.map((item) => {
+                  const maxVal = Math.max(...currentDistrict.domainDeficits.map((d) => d.demand)) * 1.1;
+                  const demandWidth = Math.round((item.demand / maxVal) * 100);
+                  const supplyWidth = Math.round((item.supply / maxVal) * 100);
+
+                  return (
+                    <div key={item.domain} className="p-3 rounded-xl bg-slate-800/40 border border-slate-800/60">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+                        <span className="text-xs sm:text-sm font-semibold text-slate-200">
+                          {item.domain}
+                        </span>
+                        <div className="flex items-center gap-3 text-xs font-mono">
+                          <span className="text-indigo-400">Req: {item.demand.toLocaleString()}</span>
+                          <span className="text-slate-600">|</span>
+                          <span className="text-emerald-400">Ready: {item.supply.toLocaleString()}</span>
+                          <span className="text-slate-600">|</span>
+                          <span className="text-rose-400 font-bold">
+                            Deficit: -{item.deficit.toLocaleString()} ({item.deficitPercent}%)
+                          </span>
+                        </div>
+                      </div>
+                      <div className="space-y-1.5">
+                        <div className="h-3 w-full rounded-full bg-slate-900 overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-indigo-600 to-indigo-400"
+                            style={{ width: `${demandWidth}%` }}
+                          ></div>
+                        </div>
+                        <div className="h-2 w-full rounded-full bg-slate-900 overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400"
+                            style={{ width: `${supplyWidth}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-slate-400 gap-2">
+                <span className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                  <span>
+                    Critical Deficit: Cloud & DevOps has a {currentDistrict.domainDeficits[1]?.deficitPercent}% talent deficit in {currentDistrict.name}.
+                  </span>
+                </span>
+                <span className="text-slate-500 font-mono">Algorithm: NSQF Matrix v2.4</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* =============================================================== */}
+        {/* VIEW 2: CURRICULUM DELTA ENGINE (INSTITUTIONAL VIEW)            */}
+        {/* =============================================================== */}
+        {activeTab === "curriculum" && (
+          <div className="space-y-6 animate-in fade-in duration-300">
+            {/* Top Selector Bar */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Icon name="book" size={18} className="text-indigo-400" />
+                  <h3 className="text-base sm:text-lg font-bold text-white">
+                    Institutional Curriculum Delta Engine
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-400 mt-1">
+                  Automated syllabus audit comparing active college schemes against live market demand.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <select
+                  value={selectedSchemeId}
+                  onChange={(e) => setSelectedSchemeId(e.target.value)}
+                  className="appearance-none pl-4 pr-10 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer shadow-inner"
+                >
+                  {SYLLABUS_SCHEMES.map((scheme) => (
+                    <option key={scheme.id} value={scheme.id}>
+                      {scheme.title}
+                    </option>
+                  ))}
+                </select>
+
+                <button
+                  onClick={handleApproveDelta}
+                  className={`flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-lg active:scale-95 ${
+                    approvedSchemes[currentScheme.id]
+                      ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30"
+                      : "bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white shadow-indigo-600/30"
+                  }`}
+                >
+                  {approvedSchemes[currentScheme.id] ? (
+                    <>
+                      <Icon name="checkCircle" size={16} />
+                      <span>Delta Approved · Export Ready</span>
+                    </>
+                  ) : (
+                    <>
+                      <Icon name="send" size={16} />
+                      <span>Approve Delta & Export Syllabus</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Metrics Ribbon */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                <span className="text-xs text-slate-400">Current Syllabus Alignment</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-2xl font-black text-amber-400">{currentScheme.currentAlignment}%</span>
+                  <span className="text-xs text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                    Legacy Gaps
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                <span className="text-xs text-slate-400">Projected Alignment (Post-Delta)</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-2xl font-black text-emerald-400">{currentScheme.projectedAlignment}%</span>
+                  <span className="text-xs text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                    +{(currentScheme.projectedAlignment - currentScheme.currentAlignment)}% Parity
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                <span className="text-xs text-slate-400">Credit Hours Reclaimed</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-2xl font-black text-indigo-400">{currentScheme.reclaimedHours} Hours</span>
+                  <Icon name="clock" size={16} className="text-indigo-400" />
+                </div>
+              </div>
+            </div>
+
+            {/* SIDE-BY-SIDE COMPARISON TABLE */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* LEFT: Outdated Topics Flagged for Removal */}
+              <div className="rounded-2xl bg-slate-900/90 border border-rose-900/30 overflow-hidden shadow-2xl">
+                <div className="px-5 py-4 bg-gradient-to-r from-rose-950/60 to-slate-900 border-b border-rose-900/40 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-1.5 rounded-lg bg-rose-500/20 text-rose-400">
+                      <Icon name="trash" size={16} />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">Outdated Topics Flagged for Removal</h4>
+                      <p className="text-[11px] text-rose-300/80">Obsolescence detected based on live hiring signals</p>
+                    </div>
+                  </div>
+                  <span className="text-xs font-mono font-bold text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20">
+                    {currentScheme.outdatedTopics.length} Flagged
+                  </span>
+                </div>
+
+                <div className="p-3 space-y-3">
+                  {currentScheme.outdatedTopics.map((topic) => (
+                    <div key={topic.code} className="p-4 rounded-xl bg-slate-800/40 border border-slate-800">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-bold bg-slate-700 text-slate-300">
+                              {topic.code}
+                            </span>
+                            <h5 className="text-xs sm:text-sm font-semibold text-rose-200">{topic.title}</h5>
+                          </div>
+                          <p className="mt-1.5 text-xs text-slate-400 leading-relaxed">{topic.reason}</p>
+                        </div>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                          {topic.severity}
+                        </span>
+                      </div>
+                      <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-[11px]">
+                        <span className="text-slate-500">
+                          Reclaims: <strong className="text-rose-300">{topic.hoursReclaimed} Lecture Hours</strong>
+                        </span>
+                        <span className="text-cyan-400 font-medium">Flagged for Replacement</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* RIGHT: Industry Demanded Modules Recommended to Add */}
+              <div className="rounded-2xl bg-slate-900/90 border border-emerald-900/30 overflow-hidden shadow-2xl">
+                <div className="px-5 py-4 bg-gradient-to-r from-emerald-950/60 to-slate-900 border-b border-emerald-900/40 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400">
+                      <Icon name="plusCircle" size={16} />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">Industry Demanded Modules Recommended to Add</h4>
+                      <p className="text-[11px] text-emerald-300/80">Direct mapping to high-growth vacancies in top tech districts</p>
+                    </div>
+                  </div>
+                  <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                    {currentScheme.demandedModules.length} Modules
+                  </span>
+                </div>
+
+                <div className="p-3 space-y-3">
+                  {currentScheme.demandedModules.map((module) => (
+                    <div key={module.code} className="p-4 rounded-xl bg-slate-800/40 border border-slate-800">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                              {module.code}
+                            </span>
+                            <h5 className="text-xs sm:text-sm font-semibold text-emerald-200">{module.title}</h5>
+                          </div>
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {module.roles.map((role) => (
+                              <span
+                                key={role}
+                                className="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-700/60 text-slate-300 border border-slate-700"
+                              >
+                                {role}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                            {module.industryDemand}% Demand
+                          </span>
+                          <p className="text-[10px] text-slate-400 mt-1">NSQF Lvl {module.nsqfLevel}</p>
+                        </div>
+                      </div>
+                      <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-[11px]">
+                        <span className="text-slate-500">
+                          Allocated Lab: <strong className="text-emerald-300">{module.labHours} Practical Hours</strong>
+                        </span>
+                        <span className="text-indigo-300 font-semibold font-mono">NEP 2020 Compliant</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* =============================================================== */}
+        {/* VIEW 3: ADAPTIVE ASSESSMENT & READINESS (STUDENT VIEW)           */}
+        {/* =============================================================== */}
+        {activeTab === "assessment" && (
+          <div className="space-y-6 animate-in fade-in duration-300">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Icon name="brain" size={18} className="text-indigo-400" />
+                  <h3 className="text-base sm:text-lg font-bold text-white">
+                    Adaptive Assessment & Student Readiness Engine
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-400 mt-1">
+                  Dynamic 3-question adaptive quiz simulator shifting difficulty badge (Easy → Medium → Hard) in real time.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-slate-400 bg-slate-800/60 px-3 py-1.5 rounded-xl border border-slate-700">
+                <Icon name="shield" size={16} className="text-emerald-400" />
+                <span>NSQF Alignment Active</span>
+              </div>
+            </div>
+
+            {!isQuizCompleted ? (
+              /* ACTIVE 3-QUESTION ADAPTIVE SIMULATOR */
+              <div className="max-w-3xl mx-auto space-y-6">
+                {/* Stepper Bar & Real-time Difficulty Badge */}
+                <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-lg space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                        Question {currentQuizStep + 1} of 3
+                      </span>
+                      <span className="text-slate-600">|</span>
+                      <span className="text-xs font-medium text-slate-300">
+                        Domain: <strong className="text-indigo-300">{currentQuestion.domain}</strong>
+                      </span>
+                    </div>
+
+                    {/* DYNAMIC DIFFICULTY BADGE (Easy -> Medium -> Hard) */}
+                    <div>
+                      {currentQuestion.difficulty === "Easy" && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                          <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                          Difficulty: Easy
+                        </span>
+                      )}
+                      {currentQuestion.difficulty === "Medium" && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                          <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                          Difficulty: Medium ↗ (Adaptive Shift)
+                        </span>
+                      )}
+                      {currentQuestion.difficulty === "Hard" && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30">
+                          <span className="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
+                          Difficulty: Hard ↗↗ (Advanced Tier)
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2">
+                    {[0, 1, 2].map((idx) => (
+                      <div
+                        key={idx}
+                        className={`h-2 rounded-full transition-all duration-300 ${
+                          currentQuizStep > idx
+                            ? "bg-emerald-500"
+                            : currentQuizStep === idx
+                            ? "bg-gradient-to-r from-indigo-500 to-cyan-500"
+                            : "bg-slate-800"
+                        }`}
+                      ></div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Question Details Card */}
+                <div className="p-6 sm:p-8 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-2xl space-y-6">
+                  <h4 className="text-base sm:text-lg font-semibold text-white leading-relaxed">
+                    {currentQuestion.questionText}
+                  </h4>
+
+                  {currentQuestion.codeSnippet && (
+                    <div className="rounded-xl bg-[#060a14] border border-slate-800 p-4 font-mono text-xs text-slate-200 overflow-x-auto">
+                      <div className="text-[10px] text-slate-500 pb-2 mb-2 border-b border-slate-800 flex items-center justify-between">
+                        <span>Industry Code Inspection</span>
+                        <span>UTF-8</span>
+                      </div>
+                      <pre className="text-slate-300 leading-relaxed">
+                        <code>{currentQuestion.codeSnippet}</code>
+                      </pre>
+                    </div>
+                  )}
+
+                  {/* Options */}
+                  <div className="space-y-3">
+                    {currentQuestion.options.map((opt) => {
+                      const isSelected = selectedOptionId === opt.id;
+                      let style = "bg-slate-800/50 border-slate-700/80 hover:bg-slate-800 text-slate-200";
+
+                      if (isSelected && !isAnswerSubmitted) {
+                        style = "bg-indigo-600/20 border-indigo-500 text-white ring-2 ring-indigo-500/30";
+                      }
+
+                      if (isAnswerSubmitted) {
+                        if (opt.isCorrect) {
+                          style = "bg-emerald-950/40 border-emerald-500 text-emerald-100 ring-2 ring-emerald-500/40";
+                        } else if (isSelected && !opt.isCorrect) {
+                          style = "bg-rose-950/40 border-rose-500 text-rose-200 ring-2 ring-rose-500/40";
+                        } else {
+                          style = "bg-slate-800/20 border-slate-800 text-slate-500 opacity-60";
+                        }
+                      }
+
+                      return (
+                        <div
+                          key={opt.id}
+                          onClick={() => handleSelectQuizOption(opt.id)}
+                          className={`p-4 rounded-xl border text-xs sm:text-sm font-medium transition-all cursor-pointer flex items-start gap-3.5 ${style}`}
+                        >
+                          <div
+                            className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+                              isSelected && !isAnswerSubmitted
+                                ? "bg-indigo-500 text-white"
+                                : "bg-slate-700 text-slate-300"
+                            }`}
+                          >
+                            {opt.id.toUpperCase()}
+                          </div>
+                          <div className="flex-1">
+                            <p className="leading-relaxed">{opt.text}</p>
+                            {isAnswerSubmitted && (isSelected || opt.isCorrect) && (
+                              <p className={`mt-2 text-xs leading-relaxed ${opt.isCorrect ? "text-emerald-300" : "text-rose-300"}`}>
+                                {opt.explanation}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Actions */}
+                  <div className="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <span className="text-xs text-slate-400">
+                      {!isAnswerSubmitted
+                        ? "Select an answer to inspect dynamic branching"
+                        : "Adaptive engine recalculating difficulty..."}
+                    </span>
+
+                    {!isAnswerSubmitted ? (
+                      <button
+                        onClick={handleSubmitQuizAnswer}
+                        disabled={!selectedOptionId}
+                        className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-indigo-600/30 transition-all active:scale-95"
+                      >
+                        Verify Answer
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleNextQuizQuestion}
+                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-emerald-600/20 transition-all active:scale-95"
+                      >
+                        <span>{currentQuizStep < 2 ? "Next Adaptive Question" : "View Readiness Score"}</span>
+                        <Icon name="arrowRight" size={16} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* FINAL RESULT CARD (Job Readiness Score: 82%, NSQF Level 5, 2-step remedial roadmap) */
+              <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-500">
+                <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900/90 to-indigo-950/60 border border-slate-800 shadow-2xl relative overflow-hidden">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="flex items-center gap-6">
+                      <div className="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-slate-950 border-4 border-indigo-500/30">
+                        <div className="text-center">
+                          <span className="text-3xl sm:text-4xl font-black text-white">82%</span>
+                          <span className="block text-[10px] uppercase font-bold text-emerald-400">Readiness</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                          Assessment Complete
+                        </span>
+                        <h4 className="text-xl sm:text-2xl font-black text-white">
+                          Job Readiness Score: 82%
+                        </h4>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-slate-300 font-semibold">NSQF Alignment Level:</span>
+                          <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            Level 5 (Industry Associate Engineer)
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-400">
+                          Evaluated by Blood Code IRT Assessment Engine against SIH26134 Industry Benchmark.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-3 w-full md:w-auto">
+                      <button
+                        onClick={handleResetQuiz}
+                        className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs sm:text-sm font-medium transition-all active:scale-95"
+                      >
+                        <Icon name="rotateCcw" size={16} />
+                        <span>Retake Adaptive Quiz</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2-STEP PERSONALIZED REMEDIAL ROADMAP */}
+                <div className="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl space-y-6">
+                  <div>
+                    <h4 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                      <Icon name="trendingUp" size={18} className="text-indigo-400" />
+                      <span>2-Step Personalized Remedial Roadmap</span>
+                    </h4>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Targeted micro-learning modules calibrated to elevate your Job Readiness from 82% to 98% (NSQF Level 6).
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {REMEDIAL_ROADMAP_STEPS.map((step, idx) => (
+                      <div key={step.title} className="p-6 rounded-2xl bg-slate-800/40 border border-slate-800 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                              idx === 0
+                                ? "bg-rose-500/20 text-rose-300 border border-rose-500/30"
+                                : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                            }`}
+                          >
+                            {step.badge}
+                          </span>
+                          <span className="text-xs font-mono text-slate-400">{step.duration}</span>
+                        </div>
+                        <h5 className="text-sm font-bold text-white">{step.title}</h5>
+                        <p className="text-xs text-slate-400">{step.description}</p>
+                        <ul className="space-y-1.5 text-xs text-slate-300">
+                          {step.deliverables.map((item) => (
+                            <li key={item} className="flex items-start gap-2">
+                              <span className="text-emerald-400">✓</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </main>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* PROFESSIONAL FOOTER                                              */}
+      {/* ---------------------------------------------------------------- */}
+      <footer className="w-full border-t border-slate-800/80 bg-[#070b16] py-6 px-4 sm:px-8 mt-12 text-xs text-slate-400">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-7 h-7 rounded-lg bg-indigo-600/30 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+              <Icon name="layers" size={16} />
+            </div>
+            <div>
+              <p className="font-semibold text-slate-200">
+                Skill Bridge — AI-Powered Industry–Skill Alignment Platform
+              </p>
+              <p className="text-[11px] text-slate-500">
+                Smart India Hackathon Prototype · Problem Statement <strong className="text-slate-400">SIH26134</strong>
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-4 text-[11px]">
+            <span className="flex items-center gap-1 text-slate-400">
+              <span>Engineered by</span>
+              <strong className="text-white px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">Team Blood Code</strong>
+            </span>
+            <span className="text-slate-600">|</span>
+            <span className="text-emerald-400 font-medium flex items-center gap-1">
+              <Icon name="shield" size={14} />
+              <span>NSQF & NEP 2020 Aligned</span>
+            </span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
