@@ -39,6 +39,7 @@ import {
   TrendingUp,
   X,
   XCircle,
+  Zap,
 } from 'lucide-react';
 import { Router as WouterRouter, Route, Switch, useLocation } from 'wouter';
 import NotFound from '@/pages/not-found';
@@ -47,93 +48,103 @@ type Tab = 'market' | 'curriculum' | 'assessment';
 type Toast = { id: number; tone: 'success' | 'info' | 'warning'; title: string; message: string };
 
 const districts = {
+  mohali: {
+    name: 'Mohali',
+    state: 'Punjab',
+    cluster: 'IT & Cloud Cluster',
+    vacancies: 11240,
+    sync: '6 min ago',
+    velocity: '+22.8%',
+    topSkill: 'Cloud Architecture & React Native',
+    topSkillScore: 98,
+    feeds: ['NCS National Portal', 'Naukri.com', 'LinkedIn', 'Punjab Rozgar'],
+    skills: [
+      ['FastAPI & Microservices', 'Backend systems', 98, '+42.6%'],
+      ['AWS & Docker Deployment', 'Cloud operations', 95, '+36.8%'],
+      ['Embedded Firmware', 'Connected devices', 91, '+29.4%'],
+    ],
+    obsolete: [
+      ['Visual Basic', 'TypeScript & Python services', '-62.4%', 'Critical'],
+      ['Static HTML/CSS Sites', 'React, Next.js & design systems', '-44.1%', 'High'],
+    ],
+    deficits: [
+      ['Cloud Architecture & Platform Engineering', 3600, 1120, 68.9],
+      ['Full-Stack & Mobile Product Engineering', 2940, 1210, 58.8],
+      ['Embedded Systems & IoT', 2120, 790, 62.7],
+      ['Cybersecurity & API Security', 1480, 560, 62.2],
+    ],
+  },
+  ludhiana: {
+    name: 'Ludhiana',
+    state: 'Punjab',
+    cluster: 'Smart Manufacturing & Auto',
+    vacancies: 8650,
+    sync: '11 min ago',
+    velocity: '+14.2%',
+    topSkill: 'CNC Automation & Industrial IoT',
+    topSkillScore: 94,
+    feeds: ['NCS National Portal', 'Ludhiana Industry Hub', 'Indeed', 'Punjab Rozgar'],
+    skills: [
+      ['PLC Programming', 'Industrial automation', 94, '+31.4%'],
+      ['Quality Engineering (Six Sigma)', 'Manufacturing excellence', 90, '+26.7%'],
+      ['Supply Chain Analytics', 'Operations intelligence', 87, '+23.8%'],
+    ],
+    obsolete: [
+      ['Manual Machine Inspection Logs', 'Digital QA & sensor telemetry', '-51.8%', 'High'],
+      ['Standalone CAD File Handoffs', 'Connected PLM & digital twins', '-38.6%', 'Moderate'],
+    ],
+    deficits: [
+      ['Industrial IoT & Sensor Networks', 2860, 1040, 63.6],
+      ['CNC Automation & Robotics', 2240, 910, 59.4],
+      ['Quality Systems & Six Sigma', 1980, 980, 50.5],
+      ['Supply Chain Data Analytics', 1570, 620, 60.5],
+    ],
+  },
   pune: {
     name: 'Pune',
     state: 'Maharashtra',
+    cluster: 'Engineering & SaaS',
     vacancies: 14820,
     sync: '8 min ago',
     velocity: '+19.4%',
+    topSkill: 'Docker & Kubernetes',
+    topSkillScore: 96,
     feeds: ['NCS National Portal', 'Naukri.com', 'LinkedIn', 'Indeed'],
     skills: [
       ['Docker & Kubernetes', 'DevOps & Cloud', 96, '+34.2%'],
-      ['FastAPI & Python Async', 'Backend', 91, '+28.7%'],
-      ['React 18 / Next.js', 'Frontend', 89, '+24.5%'],
-      ['Cloud Native AWS / GCP', 'Infrastructure', 85, '+22.1%'],
-      ['PostgreSQL & Vector DBs', 'Data & AI', 82, '+19.8%'],
+      ['FastAPI & Python Async', 'Backend systems', 91, '+28.7%'],
+      ['React 18 / Next.js', 'Frontend engineering', 89, '+24.5%'],
     ],
     obsolete: [
       ['PHP 5.6 / Legacy LAMP', 'FastAPI / Node.js Microservices', '-48.2%', 'Critical'],
-      ['Adobe Flash / Silverlight', 'HTML5 Canvas / Modern Web UI', '-94.0%', 'Critical'],
       ['Monolithic Manual FTP / CPanel', 'Docker CI/CD & GitHub Actions', '-56.1%', 'High'],
-      ['SOAP / XML-RPC Web Services', 'RESTful OpenAPI 3.0 & GraphQL', '-38.4%', 'High'],
     ],
     deficits: [
       ['Full-Stack Web Engineering', 5200, 2400, 53.8],
       ['Cloud & DevOps Automation', 4100, 1350, 67.1],
       ['AI & Data Engineering', 3100, 1100, 64.5],
       ['Cybersecurity & API Security', 1800, 650, 63.9],
-      ['Embedded Systems & IoT', 1620, 890, 45.1],
-    ],
-  },
-  bengaluru: {
-    name: 'Bengaluru',
-    state: 'Karnataka',
-    vacancies: 38450,
-    sync: '4 min ago',
-    velocity: '+26.8%',
-    feeds: ['NCS National Portal', 'LinkedIn Tech Hub', 'Instahyre', 'Naukri'],
-    skills: [
-      ['LLM Ops & GenAI RAG', 'AI Systems', 99, '+68.4%'],
-      ['Kubernetes & Distributed Systems', 'Cloud', 95, '+41.2%'],
-      ['Next.js & TypeScript', 'Full-Stack', 92, '+33.9%'],
-      ['FastAPI / Go Microservices', 'Backend', 90, '+31.5%'],
-      ['Kafka & Event Streaming', 'Data Architecture', 86, '+27.4%'],
-    ],
-    obsolete: [
-      ['Monolithic J2EE Struts 1.x', 'Spring Boot 3 / FastAPI', '-52.3%', 'Critical'],
-      ['PHP 5.4 / Procedural MySQL', 'Next.js + Prisma', '-65.0%', 'Critical'],
-      ['On-prem Bare Metal Admin', 'Terraform IaC', '-44.6%', 'High'],
-      ['jQuery DOM-heavy spaghetti', 'Modern Reactive UI (React)', '-39.2%', 'High'],
-    ],
-    deficits: [
-      ['Generative AI & LLM Systems', 11200, 3200, 71.4],
-      ['Cloud & Distributed Systems', 9800, 3900, 60.2],
-      ['Full-Stack Modern Web', 8900, 4600, 48.3],
-      ['Data Engineering & Pipelines', 5400, 2100, 61.1],
-      ['DevSecOps & Platform Eng', 3150, 1050, 66.7],
-    ],
-  },
-  jaipur: {
-    name: 'Jaipur',
-    state: 'Rajasthan',
-    vacancies: 8920,
-    sync: '16 min ago',
-    velocity: '+14.2%',
-    feeds: ['NCS National Portal', 'Naukri.com', 'Indeed', 'Rajasthan Rozgar'],
-    skills: [
-      ['React.js & Next.js Basics', 'Frontend', 92, '+29.4%'],
-      ['Python & FastAPI REST APIs', 'Backend', 88, '+26.8%'],
-      ['Docker Container Deployment', 'Cloud DevOps', 83, '+23.1%'],
-      ['MySQL 8 / PostgreSQL', 'Databases', 79, '+17.5%'],
-      ['Git & GitHub Collaboration', 'Dev Tools', 76, '+15.2%'],
-    ],
-    obsolete: [
-      ['PHP 5.6 Procedural Coding', 'Python / Node.js Backends', '-54.5%', 'Critical'],
-      ['Adobe Flash / Macromedia Tools', 'Figma & Modern Web Canvas', '-98.0%', 'Critical'],
-      ['Manual Windows IIS Server setup', 'Docker & Cloud PaaS', '-49.2%', 'High'],
-      ['Visual Basic 6.0 Form Apps', 'Modern Web Dashboards', '-72.0%', 'Critical'],
-    ],
-    deficits: [
-      ['Full-Stack Web Engineering', 3200, 1250, 60.9],
-      ['Cloud & Container DevOps', 2300, 720, 68.7],
-      ['Data Analytics & Python', 1850, 810, 56.2],
-      ['API Integration & Middleware', 1200, 490, 59.2],
-      ['Cyber Hygiene & Security', 750, 280, 62.7],
     ],
   },
 } as const;
 
 const schemes = {
+  punjab: {
+    title: 'Punjab Technical Board - Diploma in Computer Engineering',
+    regulation: 'Punjab Technical Board · 2022 Scheme',
+    current: 49,
+    projected: 93,
+    reclaimed: 34,
+    outdated: [
+      ['PB-CE-208', 'Legacy ASP.NET WebForms', '0 hiring demand in synced Punjab cluster feeds. Replace with API-first services and modern component frameworks.', 18, 'Critical'],
+      ['PB-CE-214', 'Flash Animations', 'Browser support ended and the format has no active industry demand.', 8, 'Critical'],
+    ],
+    modules: [
+      ['MOD-PB-04', 'Module 4: Containerization with Docker & Podman', 96, 18, 'Cloud Associate · DevOps Engineer'],
+      ['MOD-PB-05', 'Module 5: REST APIs using FastAPI', 98, 16, 'API Developer · Backend Engineer'],
+    ],
+    aiAudit: true,
+  },
   diploma: {
     title: 'Diploma in Web Technologies',
     regulation: 'State Board of Technical Education · 2022 Scheme',
@@ -272,8 +283,8 @@ function MetricCard({ label, value, note, accent = false, icon }: { label: strin
 
 function AppShell() {
   const [activeTab, setActiveTab] = useState<Tab>('market');
-  const [district, setDistrict] = useState<keyof typeof districts>('pune');
-  const [schemeId, setSchemeId] = useState<keyof typeof schemes>('diploma');
+  const [district, setDistrict] = useState<keyof typeof districts>('mohali');
+  const [schemeId, setSchemeId] = useState<keyof typeof schemes>('punjab');
   const [mobileNav, setMobileNav] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [approved, setApproved] = useState<Record<string, boolean>>({});
@@ -287,8 +298,8 @@ function AppShell() {
   const [answers, setAnswers] = useState<{ correct: boolean; difficulty: string }[]>([]);
   const [completed, setCompleted] = useState(false);
 
-  const selectedDistrict = districts[district];
-  const selectedScheme = schemes[schemeId];
+  const selectedDistrict = districts[district] || districts.mohali;
+  const selectedScheme = schemes[schemeId] || schemes.punjab;
   const question = questions[questionKey];
 
   const notify = (tone: Toast['tone'], title: string, message: string) => {
@@ -302,12 +313,12 @@ function AppShell() {
     setIsRefreshing(true);
     window.setTimeout(() => {
       setIsRefreshing(false);
-      notify('info', 'Market feeds synchronized', `Ingested 1,240 new postings for the ${selectedDistrict.name} cluster.`);
+      notify('info', 'Market feeds synchronized', `Ingested 1,240 new postings for the ${selectedDistrict.name} · ${selectedDistrict.cluster} cluster.`);
     }, 900);
   };
   const approve = () => {
     setApproved((items) => ({ ...items, [schemeId]: true }));
-    notify('success', 'Curriculum delta approved', `${selectedScheme.reclaimed} lecture hours are ready to export as lab credits.`);
+    notify('success', 'NSQF delta approved & PDF export ready', `AI audit approved for ${selectedScheme.title}. The reviewed delta is ready to print or save as PDF.`);
   };
   const resetQuiz = () => { setQuizStep(0); setQuestionKey('easy'); setPicked(null); setSubmitted(false); setAnswers([]); setCompleted(false); };
   const submitAnswer = () => {
@@ -335,7 +346,7 @@ function AppShell() {
         <div className="flex h-[82px] items-center border-b border-[hsl(var(--sidebar-border))] px-6">
           <button onClick={() => changeTab('market')} data-testid="button-brand" className="flex items-center gap-3 text-left">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))]"><Layers3 size={19} strokeWidth={2.5} /></span>
-            <span><span className="block font-display text-[15px] font-semibold tracking-tight">skill<span className="text-[hsl(var(--accent))]">/</span>market</span><span className="mt-0.5 block font-mono text-[9px] uppercase tracking-[.18em] opacity-60">intelligence OS</span></span>
+              <span><span className="block font-display text-[15px] font-semibold tracking-tight">skill<span className="text-[hsl(var(--accent))]">/</span>bridge</span><span className="mt-0.5 block font-mono text-[9px] uppercase tracking-[.18em] opacity-60">intelligence OS</span></span>
           </button>
           <IconButton label="Close navigation" testId="button-close-nav" onClick={() => setMobileNav(false)}><PanelLeftClose size={17} /></IconButton>
         </div>
@@ -343,8 +354,8 @@ function AppShell() {
           <p className="px-3 font-mono text-[10px] uppercase tracking-[.18em] opacity-45">Workspace</p>
           <nav className="mt-3 space-y-1" aria-label="Primary navigation">
             {[
-              { id: 'market' as Tab, label: 'Market intelligence', hint: 'District signals', icon: BarChart3 },
-              { id: 'curriculum' as Tab, label: 'Curriculum delta', hint: 'Review & sanction', icon: GitCompare },
+              { id: 'market' as Tab, label: 'Market intelligence', hint: 'Cluster signals', icon: BarChart3 },
+              { id: 'curriculum' as Tab, label: 'Curriculum delta', hint: 'AI audit & sanction', icon: GitCompare },
               { id: 'assessment' as Tab, label: 'Adaptive assessment', hint: 'Readiness paths', icon: ClipboardCheck },
             ].map(({ id, label, hint, icon: NavIcon }) => (
               <button key={id} onClick={() => changeTab(id)} data-testid={`nav-${id}`} aria-current={activeTab === id ? 'page' : undefined} className={`group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-all ${activeTab === id ? 'bg-[hsl(var(--sidebar-accent))] text-[hsl(var(--sidebar-accent-foreground))] shadow-[inset_3px_0_0_hsl(var(--accent))]' : 'opacity-70 hover:bg-[hsl(var(--sidebar-accent)/.55)] hover:opacity-100'}`}>
@@ -365,12 +376,29 @@ function AppShell() {
       </aside>
       {mobileNav && <button aria-label="Close navigation overlay" data-testid="button-nav-overlay" onClick={() => setMobileNav(false)} className="fixed inset-0 z-30 bg-[hsl(var(--foreground)/.35)] lg:hidden" />}
       <main className="min-h-[100dvh] lg:ml-[264px]">
-        <header className="sticky top-0 z-20 flex h-[82px] items-center justify-between border-b border-[hsl(var(--border))] bg-[hsl(var(--background)/.9)] px-5 backdrop-blur-md sm:px-8 lg:px-10">
-          <div className="flex items-center gap-3">
-            <IconButton label="Open navigation" testId="button-open-nav" onClick={() => setMobileNav(true)}><Menu size={21} /></IconButton>
-            <div><p className="font-mono text-[10px] uppercase tracking-[.18em] text-[hsl(var(--muted-foreground))]">Workforce intelligence / 04</p><h1 className="mt-1 font-display text-lg font-semibold tracking-tight">{activeTab === 'market' ? 'District market pulse' : activeTab === 'curriculum' ? 'Curriculum delta review' : 'Adaptive skill readiness'}</h1></div>
+        <header className="sticky top-0 z-20 border-b border-[hsl(var(--border))] bg-[hsl(var(--background)/.94)] px-5 backdrop-blur-md sm:px-8 lg:px-10">
+          <div className="flex min-h-[82px] items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <IconButton label="Open navigation" testId="button-open-nav" onClick={() => setMobileNav(true)}><Menu size={21} /></IconButton>
+              <div><p className="font-mono text-[10px] uppercase tracking-[.18em] text-[hsl(var(--muted-foreground))]">Workforce intelligence / 04</p><h1 className="mt-1 font-display text-lg font-semibold tracking-tight">{activeTab === 'market' ? 'District market pulse' : activeTab === 'curriculum' ? 'Curriculum delta review' : 'Adaptive skill readiness'}</h1></div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div data-testid="badge-ai-engine" className="hidden items-center gap-2 rounded-full border border-[hsl(var(--primary)/.25)] bg-[hsl(var(--primary)/.07)] px-3 py-2 text-[11px] font-semibold text-[hsl(var(--primary))] xl:flex">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_0_3px_hsl(145_63%_42%/.14)]" />
+                LLM: Llama-3-70B · RAG Grounded (NSQF L5-7)
+              </div>
+              <div data-testid="chip-vector-db" className="hidden items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-[11px] font-semibold text-[hsl(var(--muted-foreground))] xl:flex">
+                <Zap size={13} className="text-[hsl(var(--accent-foreground))]" />
+                Vector DB: pgvector (Embeddings Synced)
+              </div>
+              <div className="hidden items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-xs text-[hsl(var(--muted-foreground))] sm:flex"><span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))]" /> Data current · 08:42 IST</div>
+              <div className="grid h-9 w-9 place-items-center rounded-full bg-[hsl(var(--primary))] font-display text-xs font-bold text-[hsl(var(--primary-foreground))]">AK</div>
+            </div>
           </div>
-          <div className="flex items-center gap-3"><div className="hidden items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-xs text-[hsl(var(--muted-foreground))] sm:flex"><span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))]" /> Data current · 08:42 IST</div><div className="grid h-9 w-9 place-items-center rounded-full bg-[hsl(var(--primary))] font-display text-xs font-bold text-[hsl(var(--primary-foreground))]">AK</div></div>
+          <div className="flex flex-wrap gap-2 pb-3 xl:hidden">
+            <div data-testid="badge-ai-engine-mobile" className="flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/.25)] bg-[hsl(var(--primary)/.07)] px-3 py-2 text-[10px] font-semibold text-[hsl(var(--primary))]"><span className="h-2 w-2 rounded-full bg-emerald-500" />LLM: Llama-3-70B · RAG Grounded (NSQF L5-7)</div>
+            <div className="flex items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-[10px] font-semibold text-[hsl(var(--muted-foreground))]"><Cloud size={13} className="text-[hsl(var(--accent-foreground))]" />Vector DB: pgvector (Embeddings Synced)</div>
+          </div>
         </header>
         <div className="mx-auto max-w-[1440px] px-5 py-7 sm:px-8 lg:px-10 lg:py-10">
           {activeTab === 'market' && <MarketView district={district} setDistrict={setDistrict} data={selectedDistrict} isRefreshing={isRefreshing} onRefresh={refresh} chartMode={chartMode} setChartMode={setChartMode} />}
@@ -391,11 +419,11 @@ function SectionHeading({ eyebrow, title, description, action }: { eyebrow: stri
 
 function MarketView({ district, setDistrict, data, isRefreshing, onRefresh, chartMode, setChartMode }: { district: keyof typeof districts; setDistrict: (value: keyof typeof districts) => void; data: (typeof districts)[keyof typeof districts]; isRefreshing: boolean; onRefresh: () => void; chartMode: 'bars' | 'table'; setChartMode: (mode: 'bars' | 'table') => void }) {
   return <div className="animate-rise-in">
-    <SectionHeading eyebrow="01 · signal layer" title="Where the market is pulling." description="Translate live hiring demand into a clear curriculum response. Start with a district, then follow the signal from vacancy volume to skill deficit." action={<div className="flex items-center gap-2"><label className="sr-only" htmlFor="district-select">Select district</label><div className="relative"><select id="district-select" value={district} onChange={(event) => setDistrict(event.target.value as keyof typeof districts)} data-testid="select-district" className="h-10 appearance-none rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] py-2 pl-3 pr-9 text-sm font-semibold shadow-sm"><option value="pune">Pune · Maharashtra</option><option value="bengaluru">Bengaluru · Karnataka</option><option value="jaipur">Jaipur · Rajasthan</option></select><ChevronDown size={15} className="pointer-events-none absolute right-3 top-3 text-[hsl(var(--muted-foreground))]" /></div><button onClick={onRefresh} disabled={isRefreshing} data-testid="button-refresh-market" className="inline-flex h-10 items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-3 text-sm font-semibold text-[hsl(var(--primary-foreground))] transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-wait disabled:opacity-70">{isRefreshing ? <Loader2 size={15} className="animate-spin-soft" /> : <RefreshCw size={15} />}<span className="hidden sm:inline">{isRefreshing ? 'Syncing…' : 'Sync feeds'}</span></button></div>} />
+    <SectionHeading eyebrow="01 · signal layer" title="Where the market is pulling." description="Translate live hiring demand into a clear curriculum response. Start with a district, then follow the signal from vacancy volume to skill deficit." action={<div className="flex items-center gap-2"><label className="sr-only" htmlFor="district-select">Select district</label><div className="relative"><select id="district-select" value={district} onChange={(event) => setDistrict(event.target.value as keyof typeof districts)} data-testid="select-district" className="h-10 appearance-none rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] py-2 pl-3 pr-9 text-sm font-semibold shadow-sm"><option value="mohali">Mohali · Punjab</option><option value="ludhiana">Ludhiana · Punjab</option><option value="pune">Pune · Maharashtra</option></select><ChevronDown size={15} className="pointer-events-none absolute right-3 top-3 text-[hsl(var(--muted-foreground))]" /></div><button onClick={onRefresh} disabled={isRefreshing} data-testid="button-refresh-market" className="inline-flex h-10 items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-3 text-sm font-semibold text-[hsl(var(--primary-foreground))] transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-wait disabled:opacity-70">{isRefreshing ? <Loader2 size={15} className="animate-spin-soft" /> : <RefreshCw size={15} />}<span className="hidden sm:inline">{isRefreshing ? 'Syncing…' : 'Sync feeds'}</span></button></div>} />
     <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <MetricCard label="Active vacancies" value={money(data.vacancies)} note={`Across ${data.name} hiring cluster`} accent icon={<BriefcaseBusiness size={18} />} />
+       <MetricCard label="Active vacancies" value={money(data.vacancies)} note={`${data.cluster} · ${data.name}`} accent icon={<BriefcaseBusiness size={18} />} />
       <MetricCard label="Hiring velocity" value={data.velocity} note="Month-on-month movement" icon={<TrendingUp size={18} />} />
-      <MetricCard label="Top skill demand" value={`${data.skills[0][2]}/100`} note={data.skills[0][0]} icon={<Target size={18} />} />
+       <MetricCard label="Top skill demand" value={`${data.topSkillScore}/100`} note={data.topSkill} icon={<Target size={18} />} />
       <MetricCard label="Last feed sync" value={data.sync} note={`${data.feeds.length} sources responding`} icon={<RefreshCw size={18} />} />
     </div>
     <div className="mt-4 grid gap-4 xl:grid-cols-[1.35fr_.65fr]">
@@ -415,9 +443,22 @@ function MarketView({ district, setDistrict, data, isRefreshing, onRefresh, char
 function CurriculumView({ schemeId, setSchemeId, data, isApproved, onApprove, exportOpen, setExportOpen, onNotify }: { schemeId: keyof typeof schemes; setSchemeId: (value: keyof typeof schemes) => void; data: (typeof schemes)[keyof typeof schemes]; isApproved: boolean; onApprove: () => void; exportOpen: boolean; setExportOpen: (value: boolean) => void; onNotify: (tone: Toast['tone'], title: string, message: string) => void }) {
   const download = () => { const content = `${data.title}\nApproved curriculum delta\nReclaimed hours: ${data.reclaimed}\n\nRecommended modules:\n${data.modules.map((module) => `- ${module[1]} (${module[3]} lab hours)`).join('\n')}`; const url = URL.createObjectURL(new Blob([content], { type: 'text/plain' })); const link = document.createElement('a'); link.href = url; link.download = `${data.title.toLowerCase().replaceAll(' ', '-')}-delta.txt`; link.click(); URL.revokeObjectURL(url); setExportOpen(false); onNotify('success', 'Delta package downloaded', 'The approved review is ready to circulate to the academic committee.'); };
   return <div className="animate-rise-in">
-    <SectionHeading eyebrow="02 · intervention layer" title="Move from signal to syllabus." description="Review what should leave the scheme, what needs to enter it, and the evidence behind every hour reclaimed." action={<div className="relative"><label className="sr-only" htmlFor="scheme-select">Select curriculum scheme</label><select id="scheme-select" value={schemeId} onChange={(event) => setSchemeId(event.target.value as keyof typeof schemes)} data-testid="select-scheme" className="h-10 max-w-[280px] appearance-none rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] py-2 pl-3 pr-9 text-sm font-semibold"><option value="diploma">Diploma · Web Technologies</option><option value="btech">B.Tech · Computer Science</option></select><ChevronDown size={15} className="pointer-events-none absolute right-3 top-3 text-[hsl(var(--muted-foreground))]" /></div>} />
+    <SectionHeading eyebrow="02 · intervention layer" title="Move from signal to syllabus." description="Review what should leave the scheme, what needs to enter it, and the evidence behind every hour reclaimed." action={<div className="relative"><label className="sr-only" htmlFor="scheme-select">Select curriculum scheme</label><select id="scheme-select" value={schemeId} onChange={(event) => setSchemeId(event.target.value as keyof typeof schemes)} data-testid="select-scheme" className="h-10 max-w-[320px] appearance-none rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] py-2 pl-3 pr-9 text-sm font-semibold"><option value="punjab">Punjab Technical Board · Computer Engineering</option><option value="diploma">Diploma · Web Technologies</option><option value="btech">B.Tech · Computer Science</option></select><ChevronDown size={15} className="pointer-events-none absolute right-3 top-3 text-[hsl(var(--muted-foreground))]" /></div>} />
     <div className="mt-8 grid gap-4 md:grid-cols-3"><MetricCard label="Current alignment" value={`${data.current}%`} note="Existing scheme vs market" icon={<BookOpen size={18} />} /><MetricCard label="Projected alignment" value={`${data.projected}%`} note="After proposed delta" accent icon={<TrendingUp size={18} />} /><MetricCard label="Hours reclaimed" value={`${data.reclaimed}h`} note="Reassigned to applied labs" icon={<RotateCcw size={18} />} /></div>
-    <div className="mt-4 flex flex-col gap-4 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6"><div className="flex items-start gap-3"><span className={`mt-0.5 grid h-9 w-9 place-items-center rounded-xl ${isApproved ? 'bg-[hsl(var(--primary)/.12)] text-[hsl(var(--primary))]' : 'bg-[hsl(var(--accent)/.22)] text-[hsl(var(--accent-foreground))]'}`}>{isApproved ? <CheckCircle2 size={19} /> : <CircleAlert size={19} />}</span><div><p className="text-sm font-semibold">{isApproved ? 'Delta sanctioned for export' : 'Review ready for academic sign-off'}</p><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">{isApproved ? 'Approval state is saved locally for this workspace.' : 'Confirm this intervention after checking each proposed change.'}</p></div></div><div className="flex flex-wrap gap-2">{isApproved && <button onClick={() => setExportOpen(true)} data-testid="button-open-export" className="inline-flex h-10 items-center gap-2 rounded-lg border border-[hsl(var(--border))] px-3 text-sm font-semibold transition-colors hover:bg-[hsl(var(--muted))]"><Download size={15} /> Export delta</button>}<button onClick={onApprove} disabled={isApproved} data-testid="button-approve-delta" className="inline-flex h-10 items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-4 text-sm font-semibold text-[hsl(var(--primary-foreground))] transition-all hover:-translate-y-0.5 disabled:cursor-default disabled:bg-[hsl(var(--muted))] disabled:text-[hsl(var(--muted-foreground))]">{isApproved ? <Check size={15} /> : <ShieldCheck size={15} />}{isApproved ? 'Approved' : 'Approve delta'}</button></div></div>
+     <div className="mt-4 flex flex-col gap-4 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+       <div className="flex items-start gap-3"><span className={`mt-0.5 grid h-9 w-9 place-items-center rounded-xl ${isApproved ? 'bg-[hsl(var(--primary)/.12)] text-[hsl(var(--primary))]' : 'bg-[hsl(var(--accent)/.22)] text-[hsl(var(--accent-foreground))]'}`}>{isApproved ? <CheckCircle2 size={19} /> : <CircleAlert size={19} />}</span><div><p className="text-sm font-semibold">{isApproved ? 'NSQF delta approved for export' : 'Review ready for academic sign-off'}</p><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">{isApproved ? 'The reviewed curriculum change is ready to print or save as PDF.' : 'Confirm this intervention after checking each proposed change.'}</p></div></div>
+       <div className="flex flex-wrap gap-2">
+         {isApproved && <button onClick={() => setExportOpen(true)} data-testid="button-open-export" className="inline-flex h-10 items-center gap-2 rounded-lg border border-[hsl(var(--border))] px-3 text-sm font-semibold transition-colors hover:bg-[hsl(var(--muted))]"><Download size={15} /> Export delta</button>}
+         <button onClick={onApprove} disabled={isApproved} data-testid="button-approve-delta" className="inline-flex h-10 items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-4 text-sm font-semibold text-[hsl(var(--primary-foreground))] transition-all hover:-translate-y-0.5 disabled:cursor-default disabled:bg-[hsl(var(--muted))] disabled:text-[hsl(var(--muted-foreground))]">{isApproved ? <Check size={15} /> : <ShieldCheck size={15} />}{isApproved ? 'NSQF Delta Approved' : 'Approve NSQF Delta & Export PDF'}</button>
+       </div>
+     </div>
+     {schemeId === 'punjab' && <div className="mt-4 grid gap-4 xl:grid-cols-[1.05fr_.95fr]">
+       <div className="rounded-2xl border border-[hsl(var(--primary)/.25)] bg-[linear-gradient(135deg,hsl(var(--primary)/.07),hsl(var(--card))_56%)] p-5 sm:p-6">
+         <div className="flex items-start justify-between gap-4"><div><div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/.25)] bg-[hsl(var(--primary)/.08)] px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[.14em] text-[hsl(var(--primary))]"><Sparkles size={12} /> AI audit</div><h3 className="mt-4 font-display text-2xl font-semibold">LLM Audit · Grounded on NCS 2023 + NSQF</h3><p className="mt-2 max-w-xl text-sm leading-6 text-[hsl(var(--muted-foreground))]">Recommendation grounded in live vacancy embeddings, competency levels, and Punjab cluster demand.</p></div><div className="rounded-xl bg-[hsl(var(--primary))] p-3 text-[hsl(var(--primary-foreground))]"><Cloud size={20} /></div></div>
+         <div className="mt-6 grid gap-3 sm:grid-cols-2"><div className="rounded-xl border border-[hsl(var(--border)/.75)] bg-[hsl(var(--card)/.65)] p-4"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-[hsl(var(--muted-foreground))]">Verdict</p><p className="mt-2 text-sm font-semibold text-[hsl(var(--primary))]">Replace 26 hrs · Add 34 applied hrs</p></div><div className="rounded-xl border border-[hsl(var(--border)/.75)] bg-[hsl(var(--card)/.65)] p-4"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-[hsl(var(--muted-foreground))]">Confidence</p><p className="mt-2 text-sm font-semibold">0.94 · high grounding</p></div></div>
+       </div>
+       <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 sm:p-6"><div className="flex items-center justify-between gap-3"><div><p className="font-mono text-[10px] uppercase tracking-[.16em] text-[hsl(var(--muted-foreground))]">Side-by-side diff</p><h3 className="mt-1 font-display text-xl font-semibold">Proposed change</h3></div><span className="rounded-full bg-[hsl(var(--accent)/.2)] px-2 py-1 font-mono text-[10px] text-[hsl(var(--accent-foreground))]">NSQF L5-7</span></div><div className="mt-5 grid gap-3 sm:grid-cols-2"><div className="rounded-xl border border-[hsl(var(--destructive)/.25)] bg-[hsl(var(--destructive)/.04)] p-4"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-[hsl(var(--destructive))]">Outdated</p><p className="mt-2 text-sm font-semibold">Legacy ASP.NET WebForms</p><p className="mt-2 text-xs leading-5 text-[hsl(var(--muted-foreground))]">No active demand in the synced cluster.</p></div><div className="rounded-xl border border-[hsl(var(--primary)/.25)] bg-[hsl(var(--primary)/.04)] p-4"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-[hsl(var(--primary))]">Recommended</p><p className="mt-2 text-sm font-semibold">FastAPI + Docker & Podman</p><p className="mt-2 text-xs leading-5 text-[hsl(var(--muted-foreground))]">High-demand backend and container competencies.</p></div></div></div>
+     </div>}
     <div className="mt-4 grid gap-4 xl:grid-cols-2"><div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 sm:p-6"><div className="flex items-start justify-between"><div><p className="font-mono text-[10px] uppercase tracking-[.16em] text-[hsl(var(--destructive))]">Remove / retire</p><h3 className="mt-1 font-display text-xl font-semibold">Outdated topics</h3></div><ArrowDownRight size={19} className="text-[hsl(var(--destructive))]" /></div><div className="mt-5 space-y-3">{data.outdated.map(([code, title, reason, hours, severity]) => <details key={code} data-testid={`topic-${code}`} className="group rounded-xl border border-[hsl(var(--border)/.75)] p-4 open:bg-[hsl(var(--muted)/.4)]"><summary className="flex cursor-pointer list-none items-start gap-3"><span className="font-mono text-[10px] text-[hsl(var(--muted-foreground))]">{code}</span><span className="min-w-0 flex-1 text-sm font-semibold">{title}</span><span className={`rounded-md px-2 py-1 font-mono text-[9px] ${severity === 'Critical' ? 'bg-[hsl(var(--destructive)/.1)] text-[hsl(var(--destructive))]' : 'bg-[hsl(var(--accent)/.2)] text-[hsl(var(--accent-foreground))]'}`}>{severity}</span><ChevronDown size={15} className="mt-0.5 shrink-0 transition-transform group-open:rotate-180" /></summary><p className="ml-[52px] mt-3 text-xs leading-5 text-[hsl(var(--muted-foreground))]">{reason}</p><p className="ml-[52px] mt-3 font-mono text-[10px] text-[hsl(var(--primary))]">↳ free {hours} lecture hours</p></details>)}</div></div>
       <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 sm:p-6"><div className="flex items-start justify-between"><div><p className="font-mono text-[10px] uppercase tracking-[.16em] text-[hsl(var(--primary))]">Add / activate</p><h3 className="mt-1 font-display text-xl font-semibold">Demanded modules</h3></div><ArrowUpRight size={19} className="text-[hsl(var(--primary))]" /></div><div className="mt-5 space-y-3">{data.modules.map(([code, title, demand, hours, roles], index) => <div key={code} data-testid={`module-${code}`} className="rounded-xl border border-[hsl(var(--border)/.75)] p-4 transition-colors hover:border-[hsl(var(--primary)/.45)] hover:bg-[hsl(var(--primary)/.035)]"><div className="flex items-start gap-3"><span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-[hsl(var(--primary)/.1)] font-mono text-[9px] text-[hsl(var(--primary))]">{String(index + 1).padStart(2, '0')}</span><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><p className="text-sm font-semibold">{title}</p><span className="font-mono text-xs text-[hsl(var(--primary))]">{demand}/100</span></div><p className="mt-1 text-[11px] text-[hsl(var(--muted-foreground))]">{roles}</p><div className="mt-3 flex items-center gap-3"><div className="h-1.5 flex-1 rounded-full bg-[hsl(var(--muted))]"><div className="h-full rounded-full bg-[hsl(var(--primary))]" style={{ width: `${demand}%` }} /></div><span className="font-mono text-[10px] text-[hsl(var(--muted-foreground))]">{hours} lab hrs</span></div></div></div></div>)}</div></div></div>
     {exportOpen && <div role="dialog" aria-modal="true" aria-labelledby="export-title" className="fixed inset-0 z-50 grid place-items-center bg-[hsl(var(--foreground)/.35)] p-5"><div className="w-full max-w-md animate-rise-in rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-2xl"><div className="flex items-start justify-between"><div><span className="grid h-10 w-10 place-items-center rounded-xl bg-[hsl(var(--primary)/.1)] text-[hsl(var(--primary))]"><FileText size={19} /></span><h3 id="export-title" className="mt-5 font-display text-2xl font-semibold">Export review package</h3><p className="mt-2 text-sm leading-6 text-[hsl(var(--muted-foreground))]">Download a plain-text handoff for the {data.title} committee review.</p></div><IconButton label="Close export dialog" testId="button-close-export" onClick={() => setExportOpen(false)}><X size={18} /></IconButton></div><div className="mt-6 rounded-xl bg-[hsl(var(--muted)/.6)] p-4 text-sm"><div className="flex justify-between"><span className="text-[hsl(var(--muted-foreground))]">Status</span><span className="font-semibold text-[hsl(var(--primary))]">Approved</span></div><div className="mt-3 flex justify-between"><span className="text-[hsl(var(--muted-foreground))]">Proposed modules</span><span className="font-semibold">{data.modules.length}</span></div></div><div className="mt-6 flex justify-end gap-2"><button onClick={() => setExportOpen(false)} data-testid="button-cancel-export" className="h-10 rounded-lg px-3 text-sm font-semibold text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]">Cancel</button><button onClick={download} data-testid="button-download-export" className="inline-flex h-10 items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-4 text-sm font-semibold text-[hsl(var(--primary-foreground))]"><Download size={15} /> Download .txt</button></div></div></div>}
