@@ -386,18 +386,17 @@ function AppShell() {
         <div className="flex h-[82px] items-center border-b border-[hsl(var(--sidebar-border))] px-6">
           <button onClick={() => changeTab('market')} data-testid="button-brand" className="flex items-center gap-3 text-left">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))]"><Layers3 size={19} strokeWidth={2.5} /></span>
-              <span><span className="block font-display text-[15px] font-semibold tracking-tight">Skill <span className="text-[hsl(var(--accent))]">Bridge</span></span><span className="mt-0.5 block font-mono text-[9px] uppercase tracking-[.18em] opacity-60">career intelligence OS</span></span>
+              <span><span className="block font-display text-[15px] font-semibold tracking-tight">Skill <span className="text-[hsl(var(--accent))]">Bridge</span></span><span className="mt-0.5 block font-mono text-[9px] uppercase tracking-[.18em] opacity-60">government skills intelligence</span></span>
           </button>
           <IconButton label="Close navigation" testId="button-close-nav" onClick={() => setMobileNav(false)}><PanelLeftClose size={17} /></IconButton>
         </div>
         <div className="px-4 pt-7">
-          <p className="px-3 font-mono text-[10px] uppercase tracking-[.18em] opacity-45">Workspace</p>
+           <p className="px-3 font-mono text-[10px] uppercase tracking-[.18em] opacity-45">Government command center</p>
           <nav className="mt-3 space-y-1" aria-label="Primary navigation">
             {[
-              { id: 'market' as Tab, label: 'Market intelligence', hint: 'Cluster signals', icon: BarChart3 },
-              { id: 'curriculum' as Tab, label: 'Curriculum delta', hint: 'AI audit & sanction', icon: GitCompare },
-              { id: 'assessment' as Tab, label: 'Adaptive assessment', hint: 'Readiness paths', icon: ClipboardCheck },
-                { id: 'profile' as Tab, label: 'My career profile', hint: 'Survey & resume map', icon: UserRound },
+               { id: 'market' as Tab, label: 'District command center', hint: 'Vacancy & supply signals', icon: BarChart3 },
+               { id: 'curriculum' as Tab, label: 'Curriculum approvals', hint: 'AI audit & NSQF delta', icon: GitCompare },
+               { id: 'assessment' as Tab, label: 'Readiness programs', hint: 'Adaptive assessment', icon: ClipboardCheck },
             ].map(({ id, label, hint, icon: NavIcon }) => (
               <button key={id} onClick={() => changeTab(id)} data-testid={`nav-${id}`} aria-current={activeTab === id ? 'page' : undefined} className={`group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-all ${activeTab === id ? 'bg-[hsl(var(--sidebar-accent))] text-[hsl(var(--sidebar-accent-foreground))] shadow-[inset_3px_0_0_hsl(var(--accent))]' : 'opacity-70 hover:bg-[hsl(var(--sidebar-accent)/.55)] hover:opacity-100'}`}>
                 <NavIcon size={18} strokeWidth={activeTab === id ? 2.5 : 1.8} />
@@ -405,6 +404,13 @@ function AppShell() {
                 {activeTab === id && <ArrowRight size={14} className="ml-auto text-[hsl(var(--accent))]" />}
               </button>
             ))}
+             <div className="my-4 border-t border-[hsl(var(--sidebar-border))]" />
+             <p className="px-3 font-mono text-[10px] uppercase tracking-[.18em] opacity-45">Student portal · Phase 2</p>
+             <button onClick={() => changeTab('profile')} data-testid="nav-profile" aria-current={activeTab === 'profile' ? 'page' : undefined} className={`group mt-3 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-all ${activeTab === 'profile' ? 'bg-[hsl(var(--sidebar-accent))] text-[hsl(var(--sidebar-accent-foreground))] shadow-[inset_3px_0_0_hsl(var(--accent))]' : 'opacity-55 hover:bg-[hsl(var(--sidebar-accent)/.55)] hover:opacity-100'}`}>
+               <UserRound size={18} strokeWidth={activeTab === 'profile' ? 2.5 : 1.8} />
+               <span><span className="block text-[13px] font-semibold">Student pathway preview</span><span className="mt-0.5 block text-[10px] opacity-55">Survey & resume map</span></span>
+               {activeTab === 'profile' && <ArrowRight size={14} className="ml-auto text-[hsl(var(--accent))]" />}
+             </button>
           </nav>
         </div>
         <div className="mt-auto border-t border-[hsl(var(--sidebar-border))] p-5">
@@ -412,7 +418,7 @@ function AppShell() {
             <div className="flex items-center justify-between"><span className="font-mono text-[10px] uppercase tracking-[.14em] opacity-60">Data pulse</span><span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[hsl(var(--accent))] opacity-70" /><span className="relative inline-flex h-2 w-2 rounded-full bg-[hsl(var(--accent))]" /></span></div>
             <p className="mt-3 font-display text-xl font-semibold">71,240</p><p className="mt-1 text-[11px] opacity-60">postings indexed this cycle</p>
           </div>
-          <button onClick={() => notify('info', 'Support channel opened', 'A market analyst will respond in this workspace.')} data-testid="button-support" className="mt-4 flex w-full items-center gap-2 px-2 text-xs opacity-60 transition-opacity hover:opacity-100"><LifeBuoy size={14} /> Analyst support <ArrowUpRight size={13} className="ml-auto" /></button>
+             <button onClick={() => notify('info', 'Support channel opened', 'A policy analyst will respond in this workspace.')} data-testid="button-support" className="mt-4 flex w-full items-center gap-2 px-2 text-xs opacity-60 transition-opacity hover:opacity-100"><LifeBuoy size={14} /> Policy analyst support <ArrowUpRight size={13} className="ml-auto" /></button>
         </div>
       </aside>
       {mobileNav && <button aria-label="Close navigation overlay" data-testid="button-nav-overlay" onClick={() => setMobileNav(false)} className="fixed inset-0 z-30 bg-[hsl(var(--foreground)/.35)] lg:hidden" />}
@@ -421,7 +427,7 @@ function AppShell() {
           <div className="flex min-h-[82px] items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <IconButton label="Open navigation" testId="button-open-nav" onClick={() => setMobileNav(true)}><Menu size={21} /></IconButton>
-               <div><p className="font-mono text-[10px] uppercase tracking-[.18em] text-[hsl(var(--muted-foreground))]">Workforce intelligence / 04</p><h1 className="mt-1 font-display text-lg font-semibold tracking-tight">{activeTab === 'market' ? 'District market pulse' : activeTab === 'curriculum' ? 'Curriculum delta review' : activeTab === 'assessment' ? 'Adaptive skill readiness' : 'My career profile'}</h1></div>
+                <div><p className="font-mono text-[10px] uppercase tracking-[.18em] text-[hsl(var(--muted-foreground))]">{activeTab === 'profile' ? 'Student portal · preview' : 'Government workforce intelligence'}</p><h1 className="mt-1 font-display text-lg font-semibold tracking-tight">{activeTab === 'market' ? 'District command center' : activeTab === 'curriculum' ? 'Curriculum approvals' : activeTab === 'assessment' ? 'Readiness programs' : 'Student pathway preview'}</h1></div>
             </div>
             <div className="flex items-center gap-2">
               <div data-testid="badge-ai-engine" className="hidden items-center gap-2 rounded-full border border-[hsl(var(--primary)/.25)] bg-[hsl(var(--primary)/.07)] px-3 py-2 text-[11px] font-semibold text-[hsl(var(--primary))] xl:flex">
@@ -433,7 +439,7 @@ function AppShell() {
                 Vector DB: pgvector (Embeddings Synced)
               </div>
               <div className="hidden items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-xs text-[hsl(var(--muted-foreground))] sm:flex"><span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))]" /> Data current · 08:42 IST</div>
-               <button onClick={() => changeTab('profile')} data-testid="button-open-profile" aria-label="Open career profile" className={`grid h-9 w-9 place-items-center rounded-full font-display text-xs font-bold text-[hsl(var(--primary-foreground))] transition-transform hover:scale-105 ${activeTab === 'profile' ? 'bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))]' : 'bg-[hsl(var(--primary))]'}`}>AK</button>
+               <button onClick={() => changeTab('profile')} data-testid="button-open-profile" aria-label="Open student pathway preview" className={`grid h-9 w-9 place-items-center rounded-full font-display text-xs font-bold text-[hsl(var(--primary-foreground))] transition-transform hover:scale-105 ${activeTab === 'profile' ? 'bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))]' : 'bg-[hsl(var(--primary))]'}`}>AK</button>
             </div>
           </div>
           <div className="flex flex-wrap gap-2 pb-3 xl:hidden">
@@ -461,7 +467,11 @@ function SectionHeading({ eyebrow, title, description, action }: { eyebrow: stri
 
 function MarketView({ district, setDistrict, data, isRefreshing, onRefresh, chartMode, setChartMode }: { district: keyof typeof districts; setDistrict: (value: keyof typeof districts) => void; data: (typeof districts)[keyof typeof districts]; isRefreshing: boolean; onRefresh: () => void; chartMode: 'bars' | 'table'; setChartMode: (mode: 'bars' | 'table') => void }) {
   return <div className="animate-rise-in">
-    <SectionHeading eyebrow="01 · signal layer" title="Where the market is pulling." description="Translate live hiring demand into a clear curriculum response. Start with a district, then follow the signal from vacancy volume to skill deficit." action={<div className="flex items-center gap-2"><label className="sr-only" htmlFor="district-select">Select district</label><div className="relative"><select id="district-select" value={district} onChange={(event) => setDistrict(event.target.value as keyof typeof districts)} data-testid="select-district" className="h-10 appearance-none rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] py-2 pl-3 pr-9 text-sm font-semibold shadow-sm"><option value="mohali">Mohali · Punjab</option><option value="ludhiana">Ludhiana · Punjab</option><option value="pune">Pune · Maharashtra</option></select><ChevronDown size={15} className="pointer-events-none absolute right-3 top-3 text-[hsl(var(--muted-foreground))]" /></div><button onClick={onRefresh} disabled={isRefreshing} data-testid="button-refresh-market" className="inline-flex h-10 items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-3 text-sm font-semibold text-[hsl(var(--primary-foreground))] transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-wait disabled:opacity-70">{isRefreshing ? <Loader2 size={15} className="animate-spin-soft" /> : <RefreshCw size={15} />}<span className="hidden sm:inline">{isRefreshing ? 'Syncing…' : 'Sync feeds'}</span></button></div>} />
+     <SectionHeading eyebrow="01 · government command center" title="Turn labour signals into policy action." description="Give departments one view of vacancy demand, supply gaps, and district priorities. Use the signal to plan seats, target interventions, and direct curriculum review." action={<div className="flex items-center gap-2"><label className="sr-only" htmlFor="district-select">Select district</label><div className="relative"><select id="district-select" value={district} onChange={(event) => setDistrict(event.target.value as keyof typeof districts)} data-testid="select-district" className="h-10 appearance-none rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] py-2 pl-3 pr-9 text-sm font-semibold shadow-sm"><option value="mohali">Mohali · Punjab</option><option value="ludhiana">Ludhiana · Punjab</option><option value="pune">Pune · Maharashtra</option></select><ChevronDown size={15} className="pointer-events-none absolute right-3 top-3 text-[hsl(var(--muted-foreground))]" /></div><button onClick={onRefresh} disabled={isRefreshing} data-testid="button-refresh-market" className="inline-flex h-10 items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-3 text-sm font-semibold text-[hsl(var(--primary-foreground))] transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-wait disabled:opacity-70">{isRefreshing ? <Loader2 size={15} className="animate-spin-soft" /> : <RefreshCw size={15} />}<span className="hidden sm:inline">{isRefreshing ? 'Syncing…' : 'Sync feeds'}</span></button></div>} />
+     <div className="mt-7 grid gap-3 rounded-2xl border border-[hsl(var(--primary)/.2)] bg-[linear-gradient(110deg,hsl(var(--primary)/.09),hsl(var(--card))_62%)] p-5 sm:grid-cols-[1.15fr_.85fr] sm:p-6">
+       <div><div className="flex items-center gap-2 text-[hsl(var(--primary))]"><ShieldCheck size={16} /><p className="font-mono text-[10px] font-semibold uppercase tracking-[.16em]">Department decision brief</p></div><p className="mt-3 max-w-2xl text-sm leading-6 text-[hsl(var(--muted-foreground))]">Monitor the district economy, identify where training supply is falling behind, and move the highest-confidence interventions into curriculum and readiness programs.</p></div>
+       <div className="grid grid-cols-3 gap-2 sm:gap-3"><div className="rounded-xl border border-[hsl(var(--border)/.7)] bg-[hsl(var(--card)/.7)] p-3"><p className="font-mono text-[10px] text-[hsl(var(--muted-foreground))]">DISTRICTS</p><p className="mt-2 font-display text-xl font-semibold">03</p><p className="mt-1 text-[10px] text-[hsl(var(--muted-foreground))]">tracked</p></div><div className="rounded-xl border border-[hsl(var(--border)/.7)] bg-[hsl(var(--card)/.7)] p-3"><p className="font-mono text-[10px] text-[hsl(var(--muted-foreground))]">SCHEMES</p><p className="mt-2 font-display text-xl font-semibold">03</p><p className="mt-1 text-[10px] text-[hsl(var(--muted-foreground))]">review-ready</p></div><div className="rounded-xl border border-[hsl(var(--border)/.7)] bg-[hsl(var(--card)/.7)] p-3"><p className="font-mono text-[10px] text-[hsl(var(--muted-foreground))]">NSQF</p><p className="mt-2 font-display text-xl font-semibold">L5–7</p><p className="mt-1 text-[10px] text-[hsl(var(--muted-foreground))]">grounded</p></div></div>
+     </div>
     <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
        <MetricCard label="Active vacancies" value={money(data.vacancies)} note={`${data.cluster} · ${data.name}`} accent icon={<BriefcaseBusiness size={18} />} />
       <MetricCard label="Hiring velocity" value={data.velocity} note="Month-on-month movement" icon={<TrendingUp size={18} />} />
@@ -542,9 +552,9 @@ function ProfileView({
 
   return <div className="animate-rise-in">
     <SectionHeading
-      eyebrow="04 · personal signal"
-      title="Make the market map personal."
-      description="Tell Skill Bridge where you are aiming, then test your resume against live demand in the cluster you care about."
+       eyebrow="Student portal · phase 2 preview"
+       title="Turn the government signal into a student pathway."
+       description="This is the next-facing student experience: a guided profile and resume map that will connect learners to the priorities identified by the government workspace."
       action={<div className="flex items-center gap-2">
         <MapPin size={15} className="text-[hsl(var(--primary))]" />
         <label className="sr-only" htmlFor="profile-cluster-select">Select target cluster</label>
