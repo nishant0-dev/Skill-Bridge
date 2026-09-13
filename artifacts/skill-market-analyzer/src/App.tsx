@@ -21,22 +21,27 @@ import {
   Code2,
   Download,
   FileText,
+  FileUp,
   Gauge,
   GitCompare,
+  GraduationCap,
   Layers3,
   LifeBuoy,
   Loader2,
+  MapPin,
   Menu,
   Minus,
   PanelLeftClose,
   RefreshCw,
   RotateCcw,
+  Search,
   Send,
   ShieldCheck,
   Sparkles,
   Target,
   TrendingDown,
   TrendingUp,
+  UserRound,
   X,
   XCircle,
   Zap,
@@ -44,7 +49,7 @@ import {
 import { Router as WouterRouter, Route, Switch, useLocation } from 'wouter';
 import NotFound from '@/pages/not-found';
 
-type Tab = 'market' | 'curriculum' | 'assessment';
+type Tab = 'market' | 'curriculum' | 'assessment' | 'profile';
 type Toast = { id: number; tone: 'success' | 'info' | 'warning'; title: string; message: string };
 
 const districts = {
@@ -297,6 +302,17 @@ function AppShell() {
   const [submitted, setSubmitted] = useState(false);
   const [answers, setAnswers] = useState<{ correct: boolean; difficulty: string }[]>([]);
   const [completed, setCompleted] = useState(false);
+  const [surveyStep, setSurveyStep] = useState(0);
+  const [profile, setProfile] = useState({
+    role: '',
+    experience: '',
+    education: '',
+    interests: [] as string[],
+  });
+  const [profileSaved, setProfileSaved] = useState(false);
+  const [resume, setResume] = useState<{ name: string; size: string } | null>(null);
+  const [resumeParsing, setResumeParsing] = useState(false);
+  const [resumeAnalyzed, setResumeAnalyzed] = useState(false);
 
   const selectedDistrict = districts[district] || districts.mohali;
   const selectedScheme = schemes[schemeId] || schemes.punjab;
@@ -339,6 +355,30 @@ function AppShell() {
     }
     setQuizStep((step) => step + 1); setPicked(null); setSubmitted(false);
   };
+  const handleResume = (file: File | undefined) => {
+    if (!file) return;
+    const allowed = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowed.includes(file.type) && !/\.(pdf|doc|docx)$/i.test(file.name)) {
+      notify('warning', 'Unsupported resume format', 'Choose a PDF or Word document to run the local analyzer.');
+      return;
+    }
+    setResume({ name: file.name, size: `${Math.max(1, Math.round(file.size / 1024))} KB` });
+    setResumeAnalyzed(false);
+    notify('info', 'Resume ready for analysis', `${file.name} is loaded locally. Nothing has been uploaded.`);
+  };
+  const analyzeResume = () => {
+    if (!resume || resumeParsing) return;
+    setResumeParsing(true);
+    window.setTimeout(() => {
+      setResumeParsing(false);
+      setResumeAnalyzed(true);
+      notify('success', 'Resume signal extracted', `Skills mapped against ${selectedDistrict.name} and ${selectedDistrict.state} market evidence.`);
+    }, 800);
+  };
+  const saveProfile = () => {
+    setProfileSaved(true);
+    notify('success', 'Profile signal saved', `Your ${profile.role} pathway is ready for market matching.`);
+  };
 
   return (
     <div className="noise min-h-[100dvh] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
@@ -346,7 +386,7 @@ function AppShell() {
         <div className="flex h-[82px] items-center border-b border-[hsl(var(--sidebar-border))] px-6">
           <button onClick={() => changeTab('market')} data-testid="button-brand" className="flex items-center gap-3 text-left">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))]"><Layers3 size={19} strokeWidth={2.5} /></span>
-              <span><span className="block font-display text-[15px] font-semibold tracking-tight">skill<span className="text-[hsl(var(--accent))]">/</span>bridge</span><span className="mt-0.5 block font-mono text-[9px] uppercase tracking-[.18em] opacity-60">intelligence OS</span></span>
+              <span><span className="block font-display text-[15px] font-semibold tracking-tight">Skill <span className="text-[hsl(var(--accent))]">Bridge</span></span><span className="mt-0.5 block font-mono text-[9px] uppercase tracking-[.18em] opacity-60">career intelligence OS</span></span>
           </button>
           <IconButton label="Close navigation" testId="button-close-nav" onClick={() => setMobileNav(false)}><PanelLeftClose size={17} /></IconButton>
         </div>
@@ -357,6 +397,7 @@ function AppShell() {
               { id: 'market' as Tab, label: 'Market intelligence', hint: 'Cluster signals', icon: BarChart3 },
               { id: 'curriculum' as Tab, label: 'Curriculum delta', hint: 'AI audit & sanction', icon: GitCompare },
               { id: 'assessment' as Tab, label: 'Adaptive assessment', hint: 'Readiness paths', icon: ClipboardCheck },
+                { id: 'profile' as Tab, label: 'My career profile', hint: 'Survey & resume map', icon: UserRound },
             ].map(({ id, label, hint, icon: NavIcon }) => (
               <button key={id} onClick={() => changeTab(id)} data-testid={`nav-${id}`} aria-current={activeTab === id ? 'page' : undefined} className={`group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-all ${activeTab === id ? 'bg-[hsl(var(--sidebar-accent))] text-[hsl(var(--sidebar-accent-foreground))] shadow-[inset_3px_0_0_hsl(var(--accent))]' : 'opacity-70 hover:bg-[hsl(var(--sidebar-accent)/.55)] hover:opacity-100'}`}>
                 <NavIcon size={18} strokeWidth={activeTab === id ? 2.5 : 1.8} />
@@ -380,7 +421,7 @@ function AppShell() {
           <div className="flex min-h-[82px] items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <IconButton label="Open navigation" testId="button-open-nav" onClick={() => setMobileNav(true)}><Menu size={21} /></IconButton>
-              <div><p className="font-mono text-[10px] uppercase tracking-[.18em] text-[hsl(var(--muted-foreground))]">Workforce intelligence / 04</p><h1 className="mt-1 font-display text-lg font-semibold tracking-tight">{activeTab === 'market' ? 'District market pulse' : activeTab === 'curriculum' ? 'Curriculum delta review' : 'Adaptive skill readiness'}</h1></div>
+               <div><p className="font-mono text-[10px] uppercase tracking-[.18em] text-[hsl(var(--muted-foreground))]">Workforce intelligence / 04</p><h1 className="mt-1 font-display text-lg font-semibold tracking-tight">{activeTab === 'market' ? 'District market pulse' : activeTab === 'curriculum' ? 'Curriculum delta review' : activeTab === 'assessment' ? 'Adaptive skill readiness' : 'My career profile'}</h1></div>
             </div>
             <div className="flex items-center gap-2">
               <div data-testid="badge-ai-engine" className="hidden items-center gap-2 rounded-full border border-[hsl(var(--primary)/.25)] bg-[hsl(var(--primary)/.07)] px-3 py-2 text-[11px] font-semibold text-[hsl(var(--primary))] xl:flex">
@@ -392,7 +433,7 @@ function AppShell() {
                 Vector DB: pgvector (Embeddings Synced)
               </div>
               <div className="hidden items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-xs text-[hsl(var(--muted-foreground))] sm:flex"><span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))]" /> Data current · 08:42 IST</div>
-              <div className="grid h-9 w-9 place-items-center rounded-full bg-[hsl(var(--primary))] font-display text-xs font-bold text-[hsl(var(--primary-foreground))]">AK</div>
+               <button onClick={() => changeTab('profile')} data-testid="button-open-profile" aria-label="Open career profile" className={`grid h-9 w-9 place-items-center rounded-full font-display text-xs font-bold text-[hsl(var(--primary-foreground))] transition-transform hover:scale-105 ${activeTab === 'profile' ? 'bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))]' : 'bg-[hsl(var(--primary))]'}`}>AK</button>
             </div>
           </div>
           <div className="flex flex-wrap gap-2 pb-3 xl:hidden">
@@ -404,6 +445,7 @@ function AppShell() {
           {activeTab === 'market' && <MarketView district={district} setDistrict={setDistrict} data={selectedDistrict} isRefreshing={isRefreshing} onRefresh={refresh} chartMode={chartMode} setChartMode={setChartMode} />}
           {activeTab === 'curriculum' && <CurriculumView schemeId={schemeId} setSchemeId={setSchemeId} data={selectedScheme} isApproved={!!approved[schemeId]} onApprove={approve} exportOpen={exportOpen} setExportOpen={setExportOpen} onNotify={notify} />}
           {activeTab === 'assessment' && <AssessmentView question={question} step={quizStep} picked={picked} setPicked={setPicked} submitted={submitted} completed={completed} answers={answers} onSubmit={submitAnswer} onNext={nextQuestion} onReset={resetQuiz} />}
+          {activeTab === 'profile' && <ProfileView district={district} setDistrict={setDistrict} data={selectedDistrict} surveyStep={surveyStep} setSurveyStep={setSurveyStep} profile={profile} setProfile={setProfile} profileSaved={profileSaved} onSaveProfile={saveProfile} onEditProfile={() => setProfileSaved(false)} resume={resume} onResume={handleResume} resumeParsing={resumeParsing} resumeAnalyzed={resumeAnalyzed} onAnalyzeResume={analyzeResume} />}
         </div>
       </main>
       <div className="fixed bottom-5 right-5 z-50 flex w-[min(390px,calc(100vw-2rem))] flex-col gap-3" aria-live="polite">
@@ -437,6 +479,149 @@ function MarketView({ district, setDistrict, data, isRefreshing, onRefresh, char
       <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 sm:p-6"><div className="flex items-start justify-between"><div><p className="font-mono text-[10px] uppercase tracking-[.16em] text-[hsl(var(--muted-foreground))]">Deprecation watch</p><h3 className="mt-1 font-display text-xl font-semibold">Skills losing demand</h3></div><TrendingDown size={20} className="text-[hsl(var(--destructive))]" /></div><div className="mt-5 space-y-2">{data.obsolete.map(([oldSkill, replacement, rate, risk], index) => <div key={oldSkill} data-testid={`obsolete-row-${index}`} className="rounded-xl border border-[hsl(var(--border)/.7)] p-3 transition-colors hover:bg-[hsl(var(--muted)/.55)]"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-semibold">{oldSkill}</p><p className="mt-1 flex items-center gap-1.5 text-[11px] text-[hsl(var(--muted-foreground))]"><ArrowRight size={12} className="text-[hsl(var(--primary))]" /> {replacement}</p></div><span className={`shrink-0 rounded-md px-2 py-1 font-mono text-[10px] ${risk === 'Critical' ? 'bg-[hsl(var(--destructive)/.1)] text-[hsl(var(--destructive))]' : 'bg-[hsl(var(--accent)/.18)] text-[hsl(var(--accent-foreground))]'}`}>{rate}</span></div></div>)}</div></div>
       <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 sm:p-6"><div className="flex items-start justify-between"><div><p className="font-mono text-[10px] uppercase tracking-[.16em] text-[hsl(var(--muted-foreground))]">Supply gap</p><h3 className="mt-1 font-display text-xl font-semibold">Domain deficits</h3></div><span className="rounded-full bg-[hsl(var(--destructive)/.1)] px-2 py-1 font-mono text-[10px] text-[hsl(var(--destructive))]">Priority map</span></div><div className="mt-6 space-y-4">{data.deficits.map(([domain, demand, supply, deficit], index) => <div key={domain} data-testid={`deficit-row-${index}`}><div className="mb-2 flex items-center justify-between gap-3"><span className="text-sm font-semibold">{domain}</span><span className="font-mono text-xs text-[hsl(var(--destructive))]">{deficit}% gap</span></div><div className="flex h-2 gap-1 overflow-hidden rounded-full bg-[hsl(var(--muted))]"><div className="rounded-l-full bg-[hsl(var(--primary))]" style={{ width: `${(supply / demand) * 100}%` }} /><div className="rounded-r-full bg-[hsl(var(--destructive)/.7)]" style={{ width: `${(1 - supply / demand) * 100}%` }} /></div><div className="mt-1 flex justify-between font-mono text-[10px] text-[hsl(var(--muted-foreground))]"><span>Supply {money(supply)}</span><span>Demand {money(demand)}</span></div></div>)}</div></div>
     </div>
+  </div>;
+}
+
+type ProfileData = {
+  role: string;
+  experience: string;
+  education: string;
+  interests: string[];
+};
+
+const profileRoles = [
+  { id: 'full-stack engineer', label: 'Full-stack product engineer', note: 'Build web products end to end' },
+  { id: 'cloud & devops associate', label: 'Cloud & DevOps associate', note: 'Ship reliable systems and platforms' },
+  { id: 'data & ai analyst', label: 'Data & AI analyst', note: 'Turn operational data into decisions' },
+  { id: 'embedded & iot engineer', label: 'Embedded & IoT engineer', note: 'Connect devices to useful software' },
+];
+
+const profileInterests = ['Product building', 'Cloud infrastructure', 'Data storytelling', 'Applied AI', 'Cybersecurity', 'Industrial systems'];
+
+function ProfileView({
+  district,
+  setDistrict,
+  data,
+  surveyStep,
+  setSurveyStep,
+  profile,
+  setProfile,
+  profileSaved,
+  onSaveProfile,
+  onEditProfile,
+  resume,
+  onResume,
+  resumeParsing,
+  resumeAnalyzed,
+  onAnalyzeResume,
+}: {
+  district: keyof typeof districts;
+  setDistrict: (value: keyof typeof districts) => void;
+  data: (typeof districts)[keyof typeof districts];
+  surveyStep: number;
+  setSurveyStep: (value: number) => void;
+  profile: ProfileData;
+  setProfile: (value: ProfileData) => void;
+  profileSaved: boolean;
+  onSaveProfile: () => void;
+  onEditProfile: () => void;
+  resume: { name: string; size: string } | null;
+  onResume: (file: File | undefined) => void;
+  resumeParsing: boolean;
+  resumeAnalyzed: boolean;
+  onAnalyzeResume: () => void;
+}) {
+  const updateProfile = (updates: Partial<ProfileData>) => setProfile({ ...profile, ...updates });
+  const canContinue = surveyStep === 0 ? !!profile.role : surveyStep === 1 ? !!profile.experience : surveyStep === 2 ? !!profile.education : profile.interests.length > 0;
+  const extractedSkills = data.name === 'Pune'
+    ? [{ name: 'React', score: 86, evidence: 'project delivery' }, { name: 'Python', score: 78, evidence: 'automation scripts' }, { name: 'Git', score: 73, evidence: 'version control' }, { name: 'SQL', score: 65, evidence: 'data workflows' }]
+    : data.name === 'Ludhiana'
+      ? [{ name: 'Python', score: 81, evidence: 'automation scripts' }, { name: 'SQL', score: 69, evidence: 'reporting work' }, { name: 'IoT fundamentals', score: 58, evidence: 'project keywords' }, { name: 'Git', score: 72, evidence: 'version control' }]
+      : [{ name: 'React', score: 84, evidence: 'project delivery' }, { name: 'TypeScript', score: 79, evidence: 'frontend work' }, { name: 'Python', score: 75, evidence: 'automation scripts' }, { name: 'Git', score: 71, evidence: 'version control' }];
+  const surveyLabels = ['Target role', 'Experience', 'Education', 'Interest areas'];
+
+  return <div className="animate-rise-in">
+    <SectionHeading
+      eyebrow="04 · personal signal"
+      title="Make the market map personal."
+      description="Tell Skill Bridge where you are aiming, then test your resume against live demand in the cluster you care about."
+      action={<div className="flex items-center gap-2">
+        <MapPin size={15} className="text-[hsl(var(--primary))]" />
+        <label className="sr-only" htmlFor="profile-cluster-select">Select target cluster</label>
+        <div className="relative">
+          <select id="profile-cluster-select" value={district} onChange={(event) => setDistrict(event.target.value as keyof typeof districts)} data-testid="select-profile-cluster" className="h-10 appearance-none rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] py-2 pl-3 pr-9 text-sm font-semibold">
+            <option value="mohali">Mohali · Punjab</option>
+            <option value="ludhiana">Ludhiana · Punjab</option>
+            <option value="pune">Pune · Maharashtra</option>
+          </select>
+          <ChevronDown size={15} className="pointer-events-none absolute right-3 top-3 text-[hsl(var(--muted-foreground))]" />
+        </div>
+      </div>}
+    />
+
+    <div className="mt-8 grid gap-4 lg:grid-cols-[1.05fr_.95fr]">
+      <section className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 sm:p-7">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/.22)] bg-[hsl(var(--primary)/.07)] px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[.14em] text-[hsl(var(--primary))]"><Search size={12} /> Guided survey</div>
+            <h3 className="mt-4 font-display text-2xl font-semibold tracking-tight">{profileSaved ? 'Your career signal is ready.' : 'Start with your direction.'}</h3>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-[hsl(var(--muted-foreground))]">{profileSaved ? 'Use this signal to read market gaps with more context, or tune it as your target role changes.' : 'Four quick choices create a useful baseline. There are no right answers — only a sharper next step.'}</p>
+          </div>
+          <span className="hidden rounded-xl bg-[hsl(var(--accent)/.2)] p-3 text-[hsl(var(--accent-foreground))] sm:block"><UserRound size={20} /></span>
+        </div>
+
+        {profileSaved ? <div className="mt-7">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted)/.4)] p-4"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-[hsl(var(--muted-foreground))]">Target role</p><p data-testid="text-profile-role" className="mt-2 text-sm font-semibold">{profile.role}</p></div>
+            <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted)/.4)] p-4"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-[hsl(var(--muted-foreground))]">Experience</p><p data-testid="text-profile-experience" className="mt-2 text-sm font-semibold">{profile.experience}</p></div>
+            <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted)/.4)] p-4"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-[hsl(var(--muted-foreground))]">Education</p><p data-testid="text-profile-education" className="mt-2 text-sm font-semibold">{profile.education}</p></div>
+            <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted)/.4)] p-4"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-[hsl(var(--muted-foreground))]">Interest areas</p><p data-testid="text-profile-interests" className="mt-2 text-sm font-semibold">{profile.interests.join(' · ')}</p></div>
+          </div>
+          <button onClick={onEditProfile} data-testid="button-edit-profile" className="mt-6 inline-flex h-10 items-center gap-2 rounded-lg border border-[hsl(var(--border))] px-4 text-sm font-semibold transition-colors hover:bg-[hsl(var(--muted))]"><RotateCcw size={15} /> Tune my signal</button>
+        </div> : <div className="mt-7">
+          <div className="flex items-center gap-1">
+            {surveyLabels.map((label, index) => <div key={label} className="flex min-w-0 flex-1 items-center gap-2">
+              <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full border font-mono text-[10px] ${index < surveyStep ? 'border-[hsl(var(--primary))] bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]' : index === surveyStep ? 'border-[hsl(var(--accent))] bg-[hsl(var(--accent)/.18)] text-[hsl(var(--accent-foreground))]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'}`}>{index < surveyStep ? <Check size={13} /> : `0${index + 1}`}</span>
+              <span className={`hidden truncate text-[10px] font-semibold sm:block ${index === surveyStep ? 'text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>{label}</span>
+              {index < surveyLabels.length - 1 && <span className="mx-1 h-px flex-1 bg-[hsl(var(--border))]" />}
+            </div>)}
+          </div>
+          <div className="mt-7 min-h-[238px]">
+            {surveyStep === 0 && <div><p className="font-mono text-[10px] uppercase tracking-[.15em] text-[hsl(var(--muted-foreground))]">01 / where are you headed?</p><div className="mt-4 grid gap-2 sm:grid-cols-2">{profileRoles.map((role) => <button key={role.id} onClick={() => updateProfile({ role: role.label })} data-testid={`button-role-${role.id.replaceAll(' ', '-')}`} aria-pressed={profile.role === role.label} className={`rounded-xl border p-4 text-left transition-all ${profile.role === role.label ? 'border-[hsl(var(--accent))] bg-[hsl(var(--accent)/.1)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--primary)/.45)] hover:bg-[hsl(var(--muted)/.45)]'}`}><span className="flex items-start justify-between gap-3"><span className="text-sm font-semibold">{role.label}</span>{profile.role === role.label && <Check size={15} className="shrink-0 text-[hsl(var(--primary))]" />}</span><span className="mt-1 block text-[11px] leading-5 text-[hsl(var(--muted-foreground))]">{role.note}</span></button>)}</div></div>}
+            {surveyStep === 1 && <div><p className="font-mono text-[10px] uppercase tracking-[.15em] text-[hsl(var(--muted-foreground))]">02 / what is your current range?</p><div className="mt-4 grid gap-2 sm:grid-cols-3">{['Starting out · 0–1 year', 'Building depth · 1–3 years', 'Working professional · 3+ years'].map((value) => <button key={value} onClick={() => updateProfile({ experience: value })} data-testid={`button-experience-${value.slice(0, 2).replaceAll(' ', '')}`} aria-pressed={profile.experience === value} className={`min-h-20 rounded-xl border p-4 text-left text-sm font-semibold transition-all ${profile.experience === value ? 'border-[hsl(var(--accent))] bg-[hsl(var(--accent)/.1)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--primary)/.45)] hover:bg-[hsl(var(--muted)/.45)]'}`}>{value}{profile.experience === value && <Check size={15} className="mt-2 text-[hsl(var(--primary))]" />}</button>)}</div></div>}
+            {surveyStep === 2 && <div><p className="font-mono text-[10px] uppercase tracking-[.15em] text-[hsl(var(--muted-foreground))]">03 / what is your learning base?</p><div className="mt-4 grid gap-2 sm:grid-cols-2">{['Diploma / polytechnic', 'Undergraduate degree', 'Postgraduate degree', 'Self-taught / bootcamp'].map((value) => <button key={value} onClick={() => updateProfile({ education: value })} data-testid={`button-education-${value.slice(0, 3).replaceAll(' ', '')}`} aria-pressed={profile.education === value} className={`rounded-xl border p-4 text-left text-sm font-semibold transition-all ${profile.education === value ? 'border-[hsl(var(--accent))] bg-[hsl(var(--accent)/.1)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--primary)/.45)] hover:bg-[hsl(var(--muted)/.45)]'}`}><span className="flex items-center gap-2"><GraduationCap size={16} className="text-[hsl(var(--primary))]" />{value}</span></button>)}</div></div>}
+            {surveyStep === 3 && <div><p className="font-mono text-[10px] uppercase tracking-[.15em] text-[hsl(var(--muted-foreground))]">04 / what kind of work holds your attention?</p><div className="mt-4 flex flex-wrap gap-2">{profileInterests.map((interest) => { const active = profile.interests.includes(interest); return <button key={interest} onClick={() => updateProfile({ interests: active ? profile.interests.filter((item) => item !== interest) : [...profile.interests, interest] })} data-testid={`button-interest-${interest.replaceAll(' ', '-').toLowerCase()}`} aria-pressed={active} className={`rounded-full border px-3 py-2 text-xs font-semibold transition-all ${active ? 'border-[hsl(var(--primary))] bg-[hsl(var(--primary)/.1)] text-[hsl(var(--primary))]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--primary)/.45)] hover:text-[hsl(var(--foreground))]'}`}>{interest}{active && <Check size={13} className="ml-1 inline" />}</button>; })}</div><p className="mt-4 text-xs text-[hsl(var(--muted-foreground))]">Pick as many as feel relevant. This keeps recommendations broad enough to be useful.</p></div>}
+          </div>
+          <div className="mt-5 flex flex-wrap justify-between gap-2 border-t border-[hsl(var(--border))] pt-5">
+            <button onClick={() => setSurveyStep(Math.max(0, surveyStep - 1))} disabled={surveyStep === 0} data-testid="button-survey-back" className="h-10 rounded-lg px-3 text-sm font-semibold text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] disabled:cursor-not-allowed disabled:opacity-35">Back</button>
+            {surveyStep < 3 ? <button onClick={() => setSurveyStep(surveyStep + 1)} disabled={!canContinue} data-testid="button-survey-next" className="inline-flex h-10 items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-4 text-sm font-semibold text-[hsl(var(--primary-foreground))] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40">Next signal <ArrowRight size={15} /></button> : <button onClick={onSaveProfile} disabled={!canContinue} data-testid="button-save-profile" className="inline-flex h-10 items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-4 text-sm font-semibold text-[hsl(var(--primary-foreground))] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40"><Check size={15} /> Save my signal</button>}
+          </div>
+        </div>}
+      </section>
+
+      <section className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--sidebar))] p-5 text-[hsl(var(--sidebar-foreground))] sm:p-7">
+        <div className="flex items-start justify-between gap-4">
+          <div><div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--sidebar-border))] bg-[hsl(var(--sidebar-accent)/.55)] px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[.14em] text-[hsl(var(--accent))]"><FileUp size={12} /> Resume analyzer</div><h3 className="mt-4 font-display text-2xl font-semibold">See your signal in the wild.</h3><p className="mt-2 text-sm leading-6 text-[hsl(var(--sidebar-foreground)/.66)]">Drop in a resume and compare its extracted skills with demand around {data.name}.</p></div><span className="hidden rounded-xl bg-[hsl(var(--accent)/.16)] p-3 text-[hsl(var(--accent))] sm:block"><FileText size={20} /></span>
+        </div>
+        <label htmlFor="resume-upload" data-testid="label-resume-upload" className="mt-7 flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-[hsl(var(--sidebar-border))] bg-[hsl(var(--sidebar-accent)/.3)] px-4 text-center transition-colors hover:border-[hsl(var(--accent)/.65)] hover:bg-[hsl(var(--sidebar-accent)/.55)]">
+          <input id="resume-upload" data-testid="input-resume-upload" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="sr-only" onChange={(event) => onResume(event.target.files?.[0])} />
+          <span className="grid h-10 w-10 place-items-center rounded-xl bg-[hsl(var(--accent)/.18)] text-[hsl(var(--accent))]"><FileUp size={19} /></span>
+          <span className="mt-3 text-sm font-semibold">{resume ? resume.name : 'Choose a resume from this device'}</span>
+          <span className="mt-1 text-[11px] text-[hsl(var(--sidebar-foreground)/.5)]">{resume ? `${resume.size} · ready for local analysis` : 'PDF, DOC, or DOCX · stays in this workspace'}</span>
+        </label>
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-[hsl(var(--sidebar-border))] px-4 py-3"><div><p className="text-xs font-semibold">Target evidence</p><p data-testid="text-resume-cluster" className="mt-1 text-[11px] text-[hsl(var(--sidebar-foreground)/.55)]">{data.cluster} · {data.vacancies.toLocaleString('en-IN')} active vacancies</p></div><button onClick={onAnalyzeResume} disabled={!resume || resumeParsing} data-testid="button-analyze-resume" className="inline-flex h-9 shrink-0 items-center gap-2 rounded-lg bg-[hsl(var(--accent))] px-3 text-xs font-bold text-[hsl(var(--accent-foreground))] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40">{resumeParsing ? <Loader2 size={14} className="animate-spin-soft" /> : <Search size={14} />}{resumeParsing ? 'Reading…' : resumeAnalyzed ? 'Re-run analysis' : 'Analyze resume'}</button></div>
+        <div className="mt-5 flex items-start gap-2 text-[11px] leading-5 text-[hsl(var(--sidebar-foreground)/.48)]"><ShieldCheck size={14} className="mt-0.5 shrink-0 text-[hsl(var(--accent))]" />Local-first preview: seeded market evidence is used to show the shape of your report. Your file is not sent anywhere.</div>
+      </section>
+    </div>
+
+    {resumeAnalyzed && <section data-testid="section-resume-results" className="mt-4 rounded-2xl border border-[hsl(var(--primary)/.24)] bg-[linear-gradient(135deg,hsl(var(--primary)/.08),hsl(var(--card))_54%)] p-5 sm:p-7">
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><p className="font-mono text-[10px] uppercase tracking-[.18em] text-[hsl(var(--primary))]">Resume readout · {data.name}</p><h3 className="mt-2 font-display text-2xl font-semibold tracking-tight">What your resume says right now.</h3><p className="mt-2 max-w-2xl text-sm leading-6 text-[hsl(var(--muted-foreground))]">Extracted signals are compared with the strongest demand markers in the {data.cluster} feed. Treat this as a starting conversation, not a hiring verdict.</p></div><div className="rounded-xl border border-[hsl(var(--primary)/.2)] bg-[hsl(var(--card)/.75)] px-4 py-3"><p className="font-mono text-[10px] uppercase tracking-[.13em] text-[hsl(var(--muted-foreground))]">Market fit snapshot</p><p data-testid="text-market-fit" className="mt-1 font-display text-2xl font-semibold text-[hsl(var(--primary))]">74<span className="text-sm text-[hsl(var(--muted-foreground))]"> / 100</span></p></div></div>
+      <div className="mt-6 grid gap-4 lg:grid-cols-[1.1fr_.9fr]">
+        <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card)/.72)] p-5"><div className="flex items-center justify-between gap-3"><div><p className="font-mono text-[10px] uppercase tracking-[.14em] text-[hsl(var(--muted-foreground))]">Extracted skills</p><h4 className="mt-1 font-display text-lg font-semibold">Signals found in {resume?.name}</h4></div><CheckCircle2 size={18} className="text-[hsl(var(--primary))]" /></div><div className="mt-5 space-y-4">{extractedSkills.map((skill) => <div key={skill.name} data-testid={`resume-skill-${skill.name.replaceAll(' ', '-').toLowerCase()}`}><div className="mb-1.5 flex items-center justify-between gap-3"><span className="text-sm font-semibold">{skill.name}</span><span className="font-mono text-xs text-[hsl(var(--primary))]">{skill.score}% signal</span></div><div className="h-2 rounded-full bg-[hsl(var(--muted))]"><div className="h-full rounded-full bg-[hsl(var(--primary))]" style={{ width: `${skill.score}%` }} /></div><p className="mt-1 text-[11px] text-[hsl(var(--muted-foreground))]">Detected from {skill.evidence}</p></div>)}</div></div>
+        <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card)/.72)] p-5"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-[hsl(var(--muted-foreground))]">Demand match</p><h4 className="mt-1 font-display text-lg font-semibold">Where your signal lands</h4><div className="mt-5 space-y-4">{data.skills.map(([name, category, score], index) => <div key={name} data-testid={`resume-demand-${index}`}><div className="flex items-center justify-between gap-3"><span className="text-sm font-semibold">{name}</span><span className="font-mono text-xs text-[hsl(var(--primary))]">{score}/100</span></div><p className="mt-1 text-[11px] text-[hsl(var(--muted-foreground))]">{category} · active in {data.name}</p><div className="mt-2 h-1.5 rounded-full bg-[hsl(var(--muted))]"><div className="h-full rounded-full bg-[hsl(var(--accent))]" style={{ width: `${score}%` }} /></div></div>)}</div></div>
+      </div>
+      <div className="mt-4 rounded-xl border border-[hsl(var(--destructive)/.2)] bg-[hsl(var(--destructive)/.035)] p-5"><div className="flex items-start justify-between gap-4"><div><p className="font-mono text-[10px] uppercase tracking-[.14em] text-[hsl(var(--destructive))]">Priority gaps</p><h4 className="mt-1 font-display text-lg font-semibold">What to learn next for this cluster</h4></div><Target size={18} className="text-[hsl(var(--destructive))]" /></div><div className="mt-4 grid gap-2 md:grid-cols-3">{data.deficits.slice(0, 3).map(([domain, demand, supply, deficit], index) => <div key={domain} data-testid={`resume-gap-${index}`} className="rounded-lg border border-[hsl(var(--destructive)/.16)] bg-[hsl(var(--card)/.65)] p-4"><div className="flex items-start justify-between gap-2"><p className="text-sm font-semibold leading-5">{domain}</p><span className="shrink-0 font-mono text-xs text-[hsl(var(--destructive))]">{deficit}%</span></div><p className="mt-3 text-[11px] leading-5 text-[hsl(var(--muted-foreground))]">Demand {money(demand)} · supply {money(supply)}. Add one applied project to make this visible.</p></div>)}</div></div>
+    </section>}
   </div>;
 }
 
