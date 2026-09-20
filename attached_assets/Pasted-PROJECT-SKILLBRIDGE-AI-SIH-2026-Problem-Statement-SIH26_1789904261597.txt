@@ -1,0 +1,1391 @@
+PROJECT: SKILLBRIDGE AI
+SIH 2026 – Problem Statement SIH26134
+
+ROLE
+You are a senior product architect, UX designer, full-stack engineer and AI engineer.
+
+Build a production-quality prototype called "SkillBridge AI".
+
+The goal is to demonstrate an end-to-end skill-gap intelligence platform that connects:
+
+INDUSTRY DEMAND
+        ↓
+STUDENT PROFILE
+        ↓
+RESUME ANALYSIS
+        ↓
+SKILL SURVEY
+        ↓
+ADAPTIVE ASSESSMENT
+        ↓
+SKILL GAP ENGINE
+        ↓
+PERSONALIZED LEARNING ROADMAP
+        ↓
+JOB READINESS SCORE
+        ↓
+JOB MATCHING
+        ↓
+EMPLOYER FEEDBACK
+        ↓
+UPDATED INDUSTRY DEMAND
+
+IMPORTANT:
+This is an SIH prototype. It must look like a serious startup/government-grade product, NOT a generic AI-generated dashboard.
+
+==================================================
+1. CORE PRODUCT PRINCIPLE
+==================================================
+
+SkillBridge AI should answer:
+
+"What skills does the student have?"
+"What skills does industry require?"
+"What is the actual gap?"
+"What should the student learn next?"
+"How job-ready is the student?"
+"Which jobs match the student's current skills?"
+"What skills are institutions lacking across their students?"
+
+The system must combine evidence from:
+
+1. Resume
+2. Skill survey
+3. Adaptive assessment
+4. Target job requirements
+5. Industry demand data
+
+Do NOT treat the resume alone as the skill-gap source.
+
+==================================================
+2. TECHNOLOGY STACK
+==================================================
+
+Use:
+
+Frontend:
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- shadcn/ui where useful
+- Lucide React icons
+- Recharts for analytics
+- React Router
+
+Backend:
+- Python
+- FastAPI
+
+Database/Auth:
+- Firebase Authentication
+- Firebase Firestore
+
+AI:
+- Gemini API through a clean service abstraction
+
+Resume processing:
+- PDF/DOCX upload
+- Extract text
+- Skill extraction pipeline
+- AI-assisted classification
+
+Deployment:
+- Frontend can be deployed on Vercel
+- Backend can be deployed separately
+- Keep environment variables secure
+
+IMPORTANT ARCHITECTURE RULE:
+
+Create reusable services:
+
+/services
+  /ai
+  /resume
+  /assessment
+  /skills
+  /jobs
+  /analytics
+
+Do NOT duplicate business logic inside React components.
+
+==================================================
+3. DEVELOPMENT RULE
+==================================================
+
+VERY IMPORTANT:
+
+DO NOT repeatedly rewrite existing working code.
+
+Before creating a new component:
+1. Inspect the existing project.
+2. Reuse existing components.
+3. Reuse existing services.
+4. Reuse existing types.
+5. Extend existing functionality instead of creating duplicate versions.
+
+Use reusable components and OOP/service-oriented architecture wherever appropriate.
+
+Prefer:
+
+components/
+services/
+hooks/
+types/
+utils/
+
+over putting everything inside one large file.
+
+If a feature already exists, improve it instead of rebuilding it.
+
+Do not install unnecessary libraries.
+
+Keep dependencies minimal.
+
+==================================================
+4. DESIGN SYSTEM
+==================================================
+
+The UI must feel:
+
+- Premium
+- Professional
+- Modern
+- Clean
+- Data-driven
+- Enterprise SaaS
+- Government-tech compatible
+
+Avoid:
+- excessive gradients
+- excessive glassmorphism
+- huge rounded cards
+- random animations
+- childish colors
+- excessive AI robot imagery
+- generic template appearance
+
+Use:
+- white/light background
+- deep navy text
+- blue primary accent
+- subtle purple/green/orange status colors
+- clean borders
+- consistent spacing
+- strong typography hierarchy
+- professional charts
+
+Desktop-first but responsive.
+
+Use 8px spacing principles.
+
+All cards, buttons, tables and charts must align to a consistent grid.
+
+==================================================
+5. GLOBAL NAVIGATION
+==================================================
+
+Create a left sidebar:
+
+SkillBridge AI logo
+
+Dashboard
+Skill Survey
+Resume Analyzer
+Skill Assessment
+My Skill Gap
+Learning Roadmap
+AI Career Assistant
+Jobs
+Industry Demand
+
+--------------------------------
+ORGANIZATION
+--------------------------------
+
+Institution Analytics
+Employer Portal
+
+--------------------------------
+
+Profile
+Settings
+
+Sidebar should collapse on smaller screens.
+
+Top navigation:
+- Search
+- Notifications
+- User profile
+
+==================================================
+6. LANDING PAGE
+==================================================
+
+Create a professional landing page.
+
+Hero:
+
+"From Skill Gaps to Job Readiness"
+
+Subtitle:
+
+"SkillBridge AI connects student capabilities with real-world industry demand to create personalized, measurable career pathways."
+
+Buttons:
+
+"Analyze My Skills"
+"Explore Platform"
+
+Show a visual workflow:
+
+Industry Demand
+→
+Skill Intelligence
+→
+Assessment
+→
+Personalized Training
+→
+Job Readiness
+→
+Employment
+
+Sections:
+
+Problem
+Solution
+How It Works
+Platform Modules
+For Students
+For Institutions
+For Employers
+Impact
+
+Do not make unsupported claims.
+
+==================================================
+7. STUDENT DASHBOARD
+==================================================
+
+Dashboard should show:
+
+Welcome message
+
+Target Role:
+Data Analyst
+
+Overall Job Readiness:
+68%
+
+Cards:
+
+Resume Skills
+24 detected
+
+Assessment
+72%
+
+Skill Gap
+6 critical gaps
+
+Job Matches
+12
+
+Then:
+
+SKILL READINESS
+
+SQL          82%
+Excel        91%
+Power BI     48%
+Python       42%
+Statistics   55%
+
+Use professional horizontal progress bars.
+
+Then:
+
+TOP SKILL GAPS
+
+Power BI
+Python
+Statistics
+
+Then:
+
+RECOMMENDED NEXT STEPS
+
+1. Complete Power BI fundamentals
+2. Practice SQL joins
+3. Learn descriptive statistics
+
+Then:
+
+JOB MATCHES
+
+Show 3–5 example jobs.
+
+==================================================
+8. SKILL SURVEY
+==================================================
+
+Create a multi-step survey.
+
+STEP 1:
+Target career role
+
+Options:
+- Data Analyst
+- Data Scientist
+- Full Stack Developer
+- AI/ML Engineer
+- Cybersecurity Analyst
+- Cloud Engineer
+
+STEP 2:
+Current programming languages
+
+Checkboxes:
+Python
+Java
+C
+C++
+JavaScript
+SQL
+
+STEP 3:
+Tools
+
+Excel
+Power BI
+Tableau
+Git
+Docker
+AWS
+etc.
+
+STEP 4:
+Experience level
+
+Beginner
+Intermediate
+Advanced
+
+STEP 5:
+Learning goals
+
+STEP 6:
+Career preferences
+
+After completion:
+
+Generate:
+
+Student Skill Profile
+
+Do NOT immediately give a final skill gap based only on survey.
+
+Show:
+
+"Survey completed. Continue with Resume Analysis and Skill Assessment for a more accurate profile."
+
+==================================================
+9. RESUME ANALYZER
+==================================================
+
+Create a professional resume upload page.
+
+Accepted:
+PDF
+DOCX
+
+Upload area:
+
+"Drop your resume here"
+
+After upload:
+
+Extract:
+
+Name
+Education
+Experience
+Projects
+Certifications
+Technical Skills
+Soft Skills
+Tools
+
+Then show:
+
+RESUME SKILL ANALYSIS
+
+Detected Skills:
+
+SQL
+Excel
+Power BI
+Python
+Pandas
+Statistics
+
+Skill confidence can be represented internally but don't fabricate certainty.
+
+Then compare with selected role.
+
+Example:
+
+TARGET ROLE:
+Data Analyst
+
+Required Skills:
+
+SQL          ✓
+Excel        ✓
+Power BI     ⚠
+Python       ✕
+Statistics   ⚠
+
+Show:
+
+PRESENT SKILLS
+MISSING SKILLS
+PARTIAL SKILLS
+
+Also provide:
+
+Resume improvement suggestions.
+
+Example:
+
+"Add measurable outcomes to your project descriptions."
+
+"Your Power BI experience is mentioned but lacks project evidence."
+
+Important:
+Never claim a skill exists just because the AI guesses it from unrelated text.
+
+==================================================
+10. ADAPTIVE ASSESSMENT
+==================================================
+
+Build a working assessment engine.
+
+Levels:
+
+Beginner
+Intermediate
+Advanced
+
+Each level:
+
+5 questions.
+
+Passing rule:
+
+At least 3/5 correct.
+
+If:
+
+score >= 3:
+
+move to next level.
+
+If:
+
+score < 3:
+
+identify prerequisite gaps and recommend targeted learning.
+
+Questions must depend on selected skill.
+
+Example:
+
+SQL
+
+Beginner:
+SELECT
+WHERE
+ORDER BY
+basic filtering
+
+Intermediate:
+JOIN
+GROUP BY
+subqueries
+aggregations
+
+Advanced:
+window functions
+CTEs
+query optimization
+
+Do NOT hard-code the assessment UI separately for every skill.
+
+Create reusable question schema:
+
+Question
+Options
+Correct answer
+Explanation
+Difficulty
+Skill
+Topic
+
+==================================================
+11. SKILL GAP ENGINE
+==================================================
+
+This is the CORE feature.
+
+Inputs:
+
+Resume
+Survey
+Assessment
+Target Role
+Industry Requirements
+
+Generate:
+
+Current Skill Level
+Required Skill Level
+Gap
+Priority
+
+Example:
+
+SQL
+Current: 4/5
+Required: 4/5
+Gap: 0
+Status: Ready
+
+Power BI
+Current: 2/5
+Required: 4/5
+Gap: 2
+Status: Needs Improvement
+
+Python
+Current: 1/5
+Required: 3/5
+Gap: 2
+Status: Critical
+
+Create a Skill Gap Matrix.
+
+Columns:
+
+Skill
+Current Level
+Required Level
+Gap
+Priority
+Evidence
+Recommended Action
+
+==================================================
+12. SKILL GAP VISUALIZATION
+==================================================
+
+Create:
+
+Radar chart
+
+Current vs Required skills.
+
+Also:
+
+Horizontal bar chart.
+
+And:
+
+Skill Gap Heatmap.
+
+Example:
+
+              CURRENT     REQUIRED
+
+SQL             82%         85%
+Excel           91%         80%
+Power BI        48%         85%
+Python          42%         70%
+Statistics      55%         75%
+
+Use charts professionally.
+
+==================================================
+13. PERSONALIZED LEARNING ROADMAP
+==================================================
+
+Based on skill gaps.
+
+Generate:
+
+30-Day Roadmap
+
+Example:
+
+WEEK 1
+SQL joins
+Practice 20 queries
+
+WEEK 2
+Power BI fundamentals
+
+WEEK 3
+Statistics
+
+WEEK 4
+Python for analytics
+
+Each learning item:
+
+Skill
+Topic
+Estimated time
+Difficulty
+Resource
+Practice
+Assessment
+
+Use a timeline UI.
+
+Allow:
+
+Mark Complete
+
+Reassess
+
+==================================================
+14. JOB READINESS SCORE
+==================================================
+
+Create a transparent scoring model.
+
+Example:
+
+Skill Match: 40%
+Assessment: 30%
+Resume Evidence: 15%
+Project Evidence: 15%
+
+IMPORTANT:
+
+Keep the calculation visible.
+
+Show:
+
+Overall Readiness: 68%
+
+Breakdown:
+
+Skill Match       72
+Assessment        75
+Resume Evidence   61
+Project Evidence  64
+
+Do NOT present the score as an official employment guarantee.
+
+Label it:
+
+"SkillBridge Readiness Score"
+
+==================================================
+15. JOB MATCHING
+==================================================
+
+Create Jobs page.
+
+Filters:
+
+Role
+Location
+Experience
+Remote
+Skill match
+
+Each job card:
+
+Company
+Role
+Location
+Required skills
+Skill match
+Missing skills
+Readiness
+Apply
+
+Example:
+
+Data Analyst
+Company: Example Analytics
+
+Skill Match:
+78%
+
+Required:
+SQL
+Excel
+Power BI
+Python
+
+Missing:
+Power BI Advanced
+
+Button:
+View Job
+
+For prototype use mock job data.
+
+Do not scrape websites without permission.
+
+==================================================
+16. AI CAREER ASSISTANT
+==================================================
+
+Create ChatGPT-style interface.
+
+Examples:
+
+User:
+"Why is my Power BI score low?"
+
+Assistant:
+"Your assessment indicates..."
+
+User:
+"What should I learn first?"
+
+Assistant:
+"Based on your highest-priority gaps..."
+
+User:
+"Create a 30-day plan."
+
+Assistant generates a plan from the student's actual skill profile.
+
+IMPORTANT:
+
+AI must receive structured student context.
+
+Do not create a generic chatbot disconnected from the platform.
+
+Context:
+
+studentProfile
+resumeSkills
+assessmentResults
+skillGaps
+targetRole
+jobMatches
+
+==================================================
+17. INDUSTRY DEMAND MODULE
+==================================================
+
+Create Industry Demand dashboard.
+
+Show:
+
+Top Job Roles
+
+Data Analyst
+Full Stack Developer
+AI Engineer
+Cybersecurity Analyst
+
+For each:
+
+Required skills
+Skill frequency
+Demand trend
+
+Example:
+
+DATA ANALYST
+
+SQL        92%
+Excel      84%
+Power BI   76%
+Python     63%
+Statistics 58%
+
+Use clearly labelled:
+
+"Prototype / sample data"
+
+Do not present mock numbers as real-world statistics.
+
+==================================================
+18. INSTITUTION DASHBOARD
+==================================================
+
+Create separate organization dashboard.
+
+Example:
+
+Institution:
+GNA University
+
+Cohort:
+BCA 4th Semester
+
+Metrics:
+
+Students Assessed
+Skill Readiness
+Critical Skill Gaps
+Job Readiness
+
+Show cohort skill gaps:
+
+SQL
+Power BI
+Python
+Statistics
+
+Then:
+
+CURRICULUM INSIGHTS
+
+Example:
+
+"Power BI appears as a recurring gap across the cohort."
+
+"Python proficiency is below the target level for selected roles."
+
+Use mock/demo data.
+
+==================================================
+19. EMPLOYER PORTAL
+==================================================
+
+Employer can:
+
+Create Job Role
+
+Define:
+
+Required skills
+Minimum proficiency
+Experience
+Education
+
+Then platform generates:
+
+Candidate matching
+
+Example:
+
+Job:
+Junior Data Analyst
+
+Candidate A
+84% match
+
+Candidate B
+76% match
+
+Candidate C
+69% match
+
+Important:
+
+This is a prototype demonstration.
+
+Do not claim the score guarantees hiring suitability.
+
+==================================================
+20. FEEDBACK LOOP
+==================================================
+
+Create a visual page explaining:
+
+EMPLOYER
+↓
+REQUIRED SKILLS
+↓
+SKILL TAXONOMY
+↓
+STUDENT ASSESSMENT
+↓
+TRAINING
+↓
+JOB
+↓
+EMPLOYER FEEDBACK
+↓
+UPDATED SKILL DEMAND
+
+This is one of the most important SIH features.
+
+==================================================
+21. DATA MODEL
+==================================================
+
+Create reusable TypeScript interfaces.
+
+Student:
+
+id
+name
+email
+education
+targetRole
+skills
+projects
+experience
+
+Skill:
+
+id
+name
+category
+level
+
+Assessment:
+
+id
+skillId
+level
+questions
+score
+
+SkillGap:
+
+skillId
+currentLevel
+requiredLevel
+gap
+priority
+evidence
+
+Job:
+
+id
+title
+company
+location
+skills
+experience
+
+ResumeAnalysis:
+
+skills
+education
+projects
+experience
+suggestions
+
+==================================================
+22. DEMO DATA
+==================================================
+
+Create realistic mock data.
+
+Default demo student:
+
+Name:
+Aniket Kumar
+
+Target role:
+Data Analyst
+
+Skills:
+
+SQL
+Excel
+Power BI
+Python
+Statistics
+
+Projects:
+
+E-commerce Sales Dashboard
+Student Management System
+StudyPilot AI
+
+Do not hard-code this data inside UI components.
+
+Put it inside:
+
+/data/demo/
+
+Make it easy to replace with Firebase data later.
+
+==================================================
+23. AUTHENTICATION
+==================================================
+
+Implement:
+
+Google Sign-In
+
+and
+
+Email/password
+
+Use Firebase.
+
+If Firebase credentials are unavailable during development:
+
+Create a clean mock authentication service.
+
+IMPORTANT:
+
+The application must still run without Firebase configuration.
+
+Never expose secrets in frontend source code.
+
+Use environment variables.
+
+==================================================
+24. AI SERVICE ARCHITECTURE
+==================================================
+
+Create:
+
+AIService interface
+
+GeminiService implementation
+
+MockAIService implementation
+
+Example:
+
+interface AIService {
+ analyzeResume()
+ generateSkillGap()
+ generateLearningRoadmap()
+ answerCareerQuestion()
+ analyzeJobDescription()
+}
+
+This allows changing the AI provider later without rewriting the UI.
+
+==================================================
+25. RESUME SERVICE
+==================================================
+
+Create:
+
+ResumeParser interface
+
+PDFResumeParser
+
+DocxResumeParser
+
+SkillExtractor
+
+ResumeAnalyzer
+
+Keep these separate.
+
+==================================================
+26. RESPONSIVE DESIGN
+==================================================
+
+Desktop:
+Full dashboard.
+
+Tablet:
+Collapsed sidebar.
+
+Mobile:
+Bottom navigation / compact navigation.
+
+No horizontal overflow.
+
+==================================================
+27. LOADING / ERROR STATES
+==================================================
+
+Every async operation needs:
+
+Loading state
+Empty state
+Error state
+Success state
+
+Example:
+
+Resume processing:
+
+Uploading
+↓
+Extracting text
+↓
+Detecting skills
+↓
+Comparing with role
+↓
+Analysis complete
+
+Show progress to user.
+
+==================================================
+28. SECURITY
+==================================================
+
+Never expose:
+
+API keys
+Firebase private credentials
+server secrets
+
+Use:
+
+.env
+
+Add:
+
+.env.example
+
+Never commit .env.
+
+Validate uploaded files.
+
+Limit file size.
+
+Do not permanently store uploaded resumes unless explicitly required.
+
+==================================================
+29. ACCESSIBILITY
+==================================================
+
+Use:
+
+Semantic HTML
+Keyboard navigation
+Readable contrast
+ARIA labels where needed
+Visible focus states
+
+==================================================
+30. CODE QUALITY
+==================================================
+
+Before writing code:
+
+Inspect the current project.
+
+Create a feature map.
+
+Then implement in stages.
+
+Do not rewrite the whole application after every request.
+
+Use:
+
+Reusable components
+Reusable hooks
+Reusable services
+Typed interfaces
+Central constants
+Central mock data
+
+Avoid:
+
+duplicate components
+duplicate API calls
+duplicate business logic
+huge files
+hard-coded UI data
+
+==================================================
+31. IMPLEMENTATION ORDER
+==================================================
+
+Build in this order:
+
+PHASE 1
+Project architecture
+Design system
+Routing
+Sidebar
+Authentication shell
+
+PHASE 2
+Student dashboard
+Skill survey
+
+PHASE 3
+Resume Analyzer
+
+PHASE 4
+Adaptive Assessment
+
+PHASE 5
+Skill Gap Engine
+
+PHASE 6
+Learning Roadmap
+
+PHASE 7
+Readiness Score
+
+PHASE 8
+Job Matching
+
+PHASE 9
+AI Career Assistant
+
+PHASE 10
+Industry Demand
+
+PHASE 11
+Institution Dashboard
+
+PHASE 12
+Employer Portal
+
+PHASE 13
+Feedback Loop
+
+PHASE 14
+Polish
+Responsive testing
+Error handling
+Performance optimization
+
+==================================================
+32. SIH DEMO FLOW
+==================================================
+
+The application must support this complete demo:
+
+LOGIN
+
+↓
+
+DASHBOARD
+
+↓
+
+SELECT:
+Data Analyst
+
+↓
+
+COMPLETE SKILL SURVEY
+
+↓
+
+UPLOAD RESUME
+
+↓
+
+RESUME ANALYSIS
+
+↓
+
+TAKE SKILL ASSESSMENT
+
+↓
+
+SKILL GAP GENERATED
+
+↓
+
+SHOW:
+
+SQL              READY
+Excel            READY
+Power BI         GAP
+Python           GAP
+Statistics       GAP
+
+↓
+
+GENERATE:
+
+PERSONALIZED 30-DAY ROADMAP
+
+↓
+
+CALCULATE:
+
+SKILLBRIDGE READINESS SCORE
+
+↓
+
+SHOW:
+
+MATCHED JOBS
+
+↓
+
+OPEN:
+
+AI CAREER ASSISTANT
+
+↓
+
+ASK:
+
+"What should I learn first?"
+
+↓
+
+AI answers using actual student data.
+
+==================================================
+33. UI QUALITY CHECK
+==================================================
+
+Before considering the prototype complete, verify:
+
+- No overlapping elements
+- No broken routes
+- No console errors
+- No placeholder lorem ipsum
+- No fake buttons that do nothing
+- No dead navigation
+- No duplicated components
+- No inconsistent spacing
+- No random colors
+- Charts render correctly
+- Mobile layout works
+- Resume upload works
+- Survey works
+- Assessment works
+- Skill-gap calculation works
+- Roadmap generation works
+- Job matching works
+- AI assistant receives student context
+
+==================================================
+34. FINAL REQUIREMENT
+==================================================
+
+The final result should feel like:
+
+"An actual working Skill Intelligence Platform"
+
+NOT:
+
+"An AI-generated landing page with some dashboards."
+
+Prioritize working interactions over decorative animations.
+
+Build the MVP completely before adding optional visual effects.
+
+If a real API is unavailable, create a clean mock implementation behind the same service interface so that the feature works during the SIH demonstration.
+
+At the end, provide:
+
+1. Project architecture
+2. Routes
+3. Environment variables required
+4. How to run locally
+5. How to deploy
+6. Demo credentials if mock authentication is used
+7. List of implemented features
+8. List of mock/demo data
+9. Future production integrations
+
+START BY INSPECTING THE EXISTING PROJECT.
+DO NOT DELETE OR REWRITE WORKING FEATURES.
