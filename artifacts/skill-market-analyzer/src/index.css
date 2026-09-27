@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -36,36 +36,47 @@
 }
 
 :root {
-  --background: 40 33% 96%;
-  --foreground: 214 28% 19%;
-  --border: 35 20% 86%;
-  --input: 35 20% 82%;
-  --ring: 171 61% 39%;
-  --card: 42 40% 99%;
-  --card-foreground: 214 28% 19%;
-  --card-border: 35 20% 86%;
-  --popover: 42 40% 99%;
-  --popover-foreground: 214 28% 19%;
-  --popover-border: 35 20% 86%;
-  --primary: 171 61% 31%;
-  --primary-foreground: 42 40% 99%;
+  /* base surfaces — warm paper + ink navy */
+  --background: 42 32% 96%;
+  --foreground: 214 46% 12%;
+  --border: 214 14% 82%;
+  --input: 214 14% 78%;
+  --ring: 168 74% 30%;
+  --card: 42 20% 99%;
+  --card-foreground: 214 46% 12%;
+  --card-border: 214 14% 82%;
+  --popover: 42 20% 99%;
+  --popover-foreground: 214 46% 12%;
+  --popover-border: 214 14% 82%;
+
+  /* signal — deep teal */
+  --primary: 168 74% 22%;
+  --primary-foreground: 42 30% 97%;
+
   --secondary: 212 25% 92%;
   --secondary-foreground: 214 28% 24%;
-  --muted: 38 22% 92%;
-  --muted-foreground: 214 13% 48%;
-  --accent: 34 93% 54%;
-  --accent-foreground: 30 40% 15%;
-  --destructive: 3 68% 48%;
-  --destructive-foreground: 42 40% 99%;
-  --sidebar: 211 32% 16%;
-  --sidebar-foreground: 39 28% 90%;
-  --sidebar-border: 210 22% 25%;
-  --sidebar-accent: 171 48% 25%;
-  --sidebar-accent-foreground: 42 40% 99%;
-  --app-font-sans: 'DM Sans', sans-serif;
-  --app-font-mono: 'DM Mono', monospace;
-  --font-display: 'Space Grotesk', sans-serif;
-  --radius: 0.75rem;
+  --muted: 42 18% 90%;
+  --muted-foreground: 214 12% 38%;
+
+  /* attention — ochre, not alarm-red */
+  --accent: 30 55% 47%;
+  --accent-foreground: 42 30% 98%;
+
+  /* genuine risk only — muted maroon */
+  --destructive: 0 44% 30%;
+  --destructive-foreground: 42 30% 97%;
+
+  /* sidebar reads as a dossier spine, not a SaaS nav */
+  --sidebar: 214 46% 11%;
+  --sidebar-foreground: 42 24% 90%;
+  --sidebar-border: 214 30% 20%;
+  --sidebar-accent: 214 34% 17%;
+  --sidebar-accent-foreground: 42 24% 96%;
+
+  --app-font-sans: 'IBM Plex Sans', sans-serif;
+  --app-font-mono: 'IBM Plex Mono', monospace;
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --radius: 0.5rem;
 }
 
 .dark {
@@ -73,27 +84,27 @@
   --foreground: 39 28% 90%;
   --border: 210 22% 25%;
   --input: 210 22% 30%;
-  --ring: 171 61% 48%;
+  --ring: 168 74% 40%;
   --card: 211 29% 15%;
   --card-foreground: 39 28% 90%;
   --card-border: 210 22% 25%;
   --popover: 211 29% 15%;
   --popover-foreground: 39 28% 90%;
   --popover-border: 210 22% 25%;
-  --primary: 171 61% 48%;
+  --primary: 168 74% 40%;
   --primary-foreground: 211 32% 11%;
   --secondary: 210 22% 23%;
   --secondary-foreground: 39 28% 90%;
   --muted: 210 22% 20%;
   --muted-foreground: 210 12% 64%;
-  --accent: 34 93% 54%;
+  --accent: 30 55% 47%;
   --accent-foreground: 30 40% 15%;
-  --destructive: 3 68% 56%;
+  --destructive: 0 44% 45%;
   --destructive-foreground: 211 32% 11%;
   --sidebar: 211 35% 9%;
   --sidebar-foreground: 39 28% 90%;
   --sidebar-border: 210 22% 20%;
-  --sidebar-accent: 171 48% 20%;
+  --sidebar-accent: 168 48% 20%;
   --sidebar-accent-foreground: 42 40% 99%;
 }
 
@@ -111,68 +122,8 @@
 .animate-rise-in { animation: rise-in .45s cubic-bezier(.22,1,.36,1) both; }
 .animate-shimmer { background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--card)) 50%, hsl(var(--muted)) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
 .animate-spin-soft { animation: spin 1s linear infinite; }
-.font-display { font-family: var(--font-display); }
+.font-display { font-family: var(--font-display); font-optical-sizing: auto; }
 .font-mono { font-family: var(--app-font-mono); }
 .grid-paper { background-image: linear-gradient(to right, hsl(var(--border) / .34) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--border) / .34) 1px, transparent 1px); background-size: 30px 30px; }
 .noise::after { content: ''; position: fixed; pointer-events: none; inset: 0; opacity: .035; z-index: 100; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E"); }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
-
-/* Skill Bridge — design tokens
-   Drop this near the top of your global stylesheet (after Tailwind's base import).
-   Import fonts however your build handles it — e.g. in index.html:
-   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-*/
-
-:root {
-  /* base surfaces */
-  --background: 42 32% 96%;      /* warm paper #FAF7F0 */
-  --foreground: 214 46% 12%;     /* ink navy #0F1A2B */
-  --card: 42 20% 99%;
-  --border: 214 14% 82%;
-
-  /* signal */
-  --primary: 168 74% 22%;        /* deep teal #0F6E5D */
-  --primary-foreground: 42 30% 97%;
-
-  /* attention (not alarm) */
-  --accent: 30 55% 47%;          /* ochre #C97A2B */
-  --accent-foreground: 42 30% 98%;
-
-  /* genuine risk only */
-  --destructive: 0 44% 30%;      /* muted maroon #7A2E2E */
-  --destructive-foreground: 42 30% 97%;
-
-  --muted: 42 18% 90%;
-  --muted-foreground: 214 12% 38%;
-
-  /* sidebar reads as a dossier spine, not a SaaS nav */
-  --sidebar: 214 46% 11%;
-  --sidebar-foreground: 42 24% 90%;
-  --sidebar-border: 214 30% 20%;
-  --sidebar-accent: 214 34% 17%;
-  --sidebar-accent-foreground: 42 24% 96%;
-
-  --font-display: 'Fraunces', ui-serif, Georgia, serif;
-  --font-body: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
-
-  --radius: 0.5rem; /* down from the generic 0.9-1rem rounded-everything look */
-}
-
-body {
-  font-family: var(--font-body);
-}
-
-.font-display {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-}
-
-.font-mono {
-  font-family: var(--font-mono);
-}
-
-/* hairline sectioning used in place of shadowed rounded cards */
-.report-rule {
-  border-top: 1px solid hsl(var(--border));
-}
