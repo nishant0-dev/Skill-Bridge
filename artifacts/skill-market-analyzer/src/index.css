@@ -116,3 +116,63 @@
 .grid-paper { background-image: linear-gradient(to right, hsl(var(--border) / .34) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--border) / .34) 1px, transparent 1px); background-size: 30px 30px; }
 .noise::after { content: ''; position: fixed; pointer-events: none; inset: 0; opacity: .035; z-index: 100; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E"); }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+
+/* Skill Bridge — design tokens
+   Drop this near the top of your global stylesheet (after Tailwind's base import).
+   Import fonts however your build handles it — e.g. in index.html:
+   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+*/
+
+:root {
+  /* base surfaces */
+  --background: 42 32% 96%;      /* warm paper #FAF7F0 */
+  --foreground: 214 46% 12%;     /* ink navy #0F1A2B */
+  --card: 42 20% 99%;
+  --border: 214 14% 82%;
+
+  /* signal */
+  --primary: 168 74% 22%;        /* deep teal #0F6E5D */
+  --primary-foreground: 42 30% 97%;
+
+  /* attention (not alarm) */
+  --accent: 30 55% 47%;          /* ochre #C97A2B */
+  --accent-foreground: 42 30% 98%;
+
+  /* genuine risk only */
+  --destructive: 0 44% 30%;      /* muted maroon #7A2E2E */
+  --destructive-foreground: 42 30% 97%;
+
+  --muted: 42 18% 90%;
+  --muted-foreground: 214 12% 38%;
+
+  /* sidebar reads as a dossier spine, not a SaaS nav */
+  --sidebar: 214 46% 11%;
+  --sidebar-foreground: 42 24% 90%;
+  --sidebar-border: 214 30% 20%;
+  --sidebar-accent: 214 34% 17%;
+  --sidebar-accent-foreground: 42 24% 96%;
+
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-body: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius: 0.5rem; /* down from the generic 0.9-1rem rounded-everything look */
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* hairline sectioning used in place of shadowed rounded cards */
+.report-rule {
+  border-top: 1px solid hsl(var(--border));
+}
